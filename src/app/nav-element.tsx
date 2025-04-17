@@ -1,0 +1,25 @@
+"use client"; // This component is a client component
+import Link from "next/link";
+import { usePathname } from "next/navigation"; // To get the current path
+// must put curly brackets bc react only takes one argument: props
+export default function NavComponent({pathname, path, text}:{pathname: string; path: string; text: string}) {
+  // using Link instead of a tag to enable client-side navigation so we don't have a full page refresh
+    return (<Link href={path} passHref>
+          {/* {``} for template literal which allows us to embed dynamic values into string
+            * eg. ${pathname === "/"}: if pathname is /, then add bg-yellow-600 class to the button
+          */}
+            <button className={`text-white px-4 py-2 rounded-md w-32 hover:bg-yellow-600 transition flex items-center 
+              ${pathname === path ? "bg-yellow-400" : "bg-yellow-500"}`}>
+              {/* If pathname is /, show the image; && is conditional rendering not merely an and */}
+              {pathname === path && (
+                <img
+                  src="/vercel.svg" // Replace with your image path
+                  alt="Home Icon"
+                  className="w-4 h-4 mr-2"
+                />
+              )}
+              {text}
+            </button>
+    </Link>);
+
+}

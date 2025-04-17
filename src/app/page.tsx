@@ -1,21 +1,65 @@
+"use client"; // This is a client component, lets me use useState
 import Image from "next/image";
+import { useState } from "react";
+
+function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>) {
+  setIsFlipped(!isFlipped); // Toggle the state
+  console.log("isFlipped", isFlipped); // Log the current state
+}
 
 export default function Home() {
+  // flip that pokemon!
+  // hook to add state to isFlipped which means i dont have to create a class
+  // [var, settervar]
+  const [isFlipped, setIsFlipped] = useState(false);
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    /*
+      * grid: enables CSS grid layout
+      * grid-rows-[20px_1fr_40px]: spacing/header, main, footer
+      * min-h-screen: sets minimum height to 100 vertical height
+      * p-8 pb-20: padding of 8 units and bottom padding of 20 units
+      * gap-16: gap of 16 units between grid items
+      * sm:p-20: padding of 20 units on screens larger than 'sm' breakpoint, else it's the padding on the left of sm:
+      */
+    <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <div className="flex flex-col gap-[32px] row-start-1 font-sans text-4xl">
+        Pokemon Game
+      </div>
+      {/* flex flex-col: Uses Flexbox with a vertical column layout.
+      gap-[32px]: Adds 32px spacing between child elements. 
+      row-start-2: Places <main> in Grid row 2 (the middle row).
+      items-center: Centers items horizontally 
+      */}
+      <main className="flex flex-col gap-[32px] row-start-2 items-center">
+        <div className = "flex flex-col gap-2">
+          Let's catch this pokemon!
+        </div>
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
+            src="/pikachu_tie.jpg"
+            alt="Pikachu with Tie"
+            width={160}
+            height={160}
+            className={isFlipped ? "transform scale-x-[-1]" : ""}
+          />
+        <button
+          onClick={() => handleFlip(isFlipped, setIsFlipped)}
+          className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+        >
+          Flip your pokemon!
+        </button>
+        <div className = "flex flex-col gap-2 font-sans text-sm text-red-500">
+          sm: test font size with font-sans/arcade theme
+        </div>
+        <div className = "flex flex-col gap-2 font-sans text-xs">
+          test-xs: test font size with font-sans/arcade theme
+        </div>
+        <div className = "flex flex-col gap-2 font-sans text-xs font-bold">
+          font-bold: test-xs: doesnt seem to have thinner fonts tho
+        </div>
+        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left">
+          <li className="tracking-[-.01em]">
             Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded">
               src/app/page.tsx
             </code>
             .
@@ -23,37 +67,18 @@ export default function Home() {
           <li className="tracking-[-.01em]">
             Save and see your changes instantly.
           </li>
+          <li className="tracking-[-.01em]">
+            Save and see your changes instantly.\nthis
+          </li>
         </ol>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          className=" flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
