@@ -32,7 +32,7 @@ export default function Home() {
       */}
       <main className="flex flex-col gap-[32px] row-start-2 items-center">
         <div className = "flex flex-col gap-2">
-          Let's catch this pokemon!
+          Let&apos;s catch this pokemon!
         </div>
         <Image
             src="/pikachu_tie.jpg"
