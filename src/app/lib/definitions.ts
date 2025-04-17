@@ -1,0 +1,16 @@
+// Define the structure of a Pokémon
+export type Pokemon = {
+    id: number;
+    date: string;
+    shiny: number;
+    normal: number;
+  };
+  
+  // Define the structure of a user
+  export type User = {
+    id: string; // UUID
+    name: string;
+    email: string;
+    password: string;
+    pokemon: Pokemon[];
+  };
