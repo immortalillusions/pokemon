@@ -1,6 +1,8 @@
 "use client"; // This is a client component, lets me use useState
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+//import { useSession } from 'next-auth/react';
+import {getCookie} from 'cookies-next'; // Import the getCookie function from cookies-next
 
 function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>) {
   setIsFlipped(!isFlipped); // Toggle the state
@@ -8,6 +10,15 @@ function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React.SetSt
 }
 
 export default function Home() {
+  const [userId, setUserId] = useState<string | null>(null);
+  useEffect(() => {
+    const userId = getCookie('userId'); // Retrieve the userId from the cookie
+    setUserId(userId as string | null);
+  }, []);
+  console.log(userId); // Logs the user ID
+  // const { data: session } = useSession();
+  // console.log(session);
+ // console.log(userId); // Logs the user ID
   // flip that pokemon!
   // hook to add state to isFlipped which means i dont have to create a class
   // [var, settervar]
@@ -23,7 +34,7 @@ export default function Home() {
       */
     <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <div className="flex flex-col gap-[32px] row-start-1 font-sans text-4xl">
-        Pokemon Game
+        Pokemon Game: Welcome~ {userId}
       </div>
       {/* flex flex-col: Uses Flexbox with a vertical column layout.
       gap-[32px]: Adds 32px spacing between child elements. 
