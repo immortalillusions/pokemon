@@ -1,10 +1,19 @@
 'use server';
+import {getUser} from './lib/db';
+import { User } from './lib/definitions'; // Import User type
 import {getSession} from './lib/actions'; // To get the session
-// i separated this from the main page so that main page could be client side bc i cannot pass the session to the main page (client)
+// i separated this from the main page so that main page could be client side (if desired) bc i cannot pass the session to the main page (client)
 // so i just pass it to this page (server) and then include this as a component within main page
 // "Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported"
 const Welcome = async () => {
     const session = await getSession(); // Get the session to check if the user is logged in
+    const userId = session.userId;
+
+  try {
+    // Fetch the user data using the reusable getUser function
+    const userData = await getUser(userId);
+    console.log(userData);
+
     return (
         // p-4 = padding, mt = margin top
         <>
@@ -13,7 +22,7 @@ const Welcome = async () => {
                 Pokemon Game
                 </div>
                 <div className="font-sans text-l sm:text-l text-center">
-                Welcome {session.email}
+                Welcome {userData.user_name}
                 </div>
                 <div className="text-base text-center">
                 <p className = "mb-2">Your username is: <span className="font-sans text-[0.6rem] ml-1">{session.email}</span></p>
@@ -23,6 +32,12 @@ const Welcome = async () => {
         </>
         
     );
-}
+} catch (error) {
+    if (error instanceof Error) {
+        return <div>Error: {error.message}</div>;
+    }
+    return <div>An unknown error occurred.</div>;
+  }
+};
 
 export default Welcome;

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import {SessionProvider} from "next-auth/react";
 import "./globals.css";
 import Navbar from "./Navbar";
 // anything in layout is shared among all UI within the same folder
@@ -28,11 +27,9 @@ export default function RootLayout({
       <body
         className={`${arcade.variable} antialiased`}
       >
-        {/* <SessionProvider> */}
         {children}
         {/* include navbar */}
         <Navbar/>
-       {/* </SessionProvider> */}
       </body>
     </html>
   );

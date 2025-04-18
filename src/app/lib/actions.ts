@@ -13,7 +13,7 @@ export const getSession = async ()=>{
   // decrypt cookies with sessionOptions definition
   // goat tutorial: https://www.youtube.com/watch?v=p_FiVGxyksI
   const session = await getIronSession<sessionData>(await cookies(), sessionOptions); 
-  // when not loggedin, it is equivalent to the default which is not logged in
+  // ensures that the session is not undefined (by setting it to false)
   if(!session.isLoggedIn) {
     session.isLoggedIn = defaultSession.isLoggedIn; // Set default session if not logged in
   }
