@@ -1,8 +1,10 @@
 "use client"; // This component is a client component
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // To get the current path
 
 // must put curly brackets bc react only takes one argument: props
-export default function NavComponent({pathname, path, text}:{pathname: string; path: string; text: string}) {
+export default function NavComponent({path, text}:{path: string; text: string}) {
+  const pathname = usePathname(); // Get the current path
   // using Link instead of a tag to enable client-side navigation so we don't have a full page refresh
     return (<Link href={path} passHref>
           {/* {``} for template literal which allows us to embed dynamic values into string

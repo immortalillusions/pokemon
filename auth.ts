@@ -8,9 +8,7 @@ import type { User } from "@/app/lib/definitions";
 import bcrypt from 'bcryptjs';
 import postgres from 'postgres';
 
-import { serialize } from 'cookie'; // Import cookie utility
-import type { NextApiResponse } from 'next'; // Add this import at the top of the file
-
+import { getSession } from './src/app/lib/actions'; // Import getSession function
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
  
@@ -44,22 +42,12 @@ export const { auth, signIn, signOut } = NextAuth({
                 const passwordMatch = await bcrypt.compare(password, user.password);
                 // matched password
                 if (passwordMatch) {
-                    // console.log("valid credentials");
-                    // // Save user ID in a cookie
-                    // const cookie = serialize('userId', user.id, {
-                    //   httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-                    //   secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-                    //   sameSite: 'strict', // Prevent CSRF attacks
-                    //   path: '/', // Cookie is accessible across the entire site
-                    // });
-        
-                    // // Set the cookie in the response headers
-                    // if (typeof window === 'undefined') {
-                    //   // Server-side: Set the cookie in the response
-                    //   const res = credentials?.res as NextApiResponse; // Explicitly type res as NextApiResponse
-                    //   res.setHeader('Set-Cookie', cookie);
-                    // }
-        
+                    // Save user ID in a session
+                    const session = await getSession(); // Get the session object
+                    session.userId = user.id; // Set the user ID in the session
+                    session.email = user.email; // Set the email in the session
+                    session.isLoggedIn = true; // Set the logged-in status in the session
+                    await session.save(); // Save the session to persist the user ID in a cookie
                     return user; // Return the user object
                   }
               }

@@ -1,28 +1,10 @@
-"use client"; // This is a client component, lets me use useState
+//"use client"; // This is a client component, lets me use useState
 import Image from "next/image";
-import { useEffect, useState } from "react";
-//import { useSession } from 'next-auth/react';
-import {getCookie} from 'cookies-next'; // Import the getCookie function from cookies-next
 
-function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>) {
-  setIsFlipped(!isFlipped); // Toggle the state
-  console.log("isFlipped", isFlipped); // Log the current state
-}
+import Welcome from "./welcome";
+import FlipPikachu from "./flipPikachu";
 
 export default function Home() {
-  const [userId, setUserId] = useState<string | null>(null);
-  useEffect(() => {
-    const userId = getCookie('userId'); // Retrieve the userId from the cookie
-    setUserId(userId as string | null);
-  }, []);
-  console.log(userId); // Logs the user ID
-  // const { data: session } = useSession();
-  // console.log(session);
- // console.log(userId); // Logs the user ID
-  // flip that pokemon!
-  // hook to add state to isFlipped which means i dont have to create a class
-  // [var, settervar]
-  const [isFlipped, setIsFlipped] = useState(false);
   return (
     /*
       * grid: enables CSS grid layout
@@ -33,31 +15,17 @@ export default function Home() {
       * sm:p-20: padding of 20 units on screens larger than 'sm' breakpoint, else it's the padding on the left of sm:
       */
     <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <div className="flex flex-col gap-[32px] row-start-1 font-sans text-4xl">
-        Pokemon Game: Welcome~ {userId}
-      </div>
+      <Welcome />
       {/* flex flex-col: Uses Flexbox with a vertical column layout.
       gap-[32px]: Adds 32px spacing between child elements. 
       row-start-2: Places <main> in Grid row 2 (the middle row).
       items-center: Centers items horizontally 
       */}
-      <main className="flex flex-col gap-[32px] row-start-2 items-center">
+      <main className="mt-2 flex flex-col gap-[32px] row-start-2 items-center">
         <div className = "flex flex-col gap-2">
           Let&apos;s catch this pokemon!
         </div>
-        <Image
-            src="/pikachu_tie.jpg"
-            alt="Pikachu with Tie"
-            width={160}
-            height={160}
-            className={isFlipped ? "transform scale-x-[-1]" : ""}
-          />
-        <button
-          onClick={() => handleFlip(isFlipped, setIsFlipped)}
-          className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
-        >
-          Flip your pokemon!
-        </button>
+        <FlipPikachu/>
         <div className = "flex flex-col gap-2 font-sans text-sm text-red-500">
           sm: test font size with font-sans/arcade theme
         </div>
