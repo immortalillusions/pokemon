@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { CommandLineIcon } from '@heroicons/react/24/outline';
 import LoginForm from "./login-form";
 // maybe later ill add a loading spinner for suspense
 export default function LoginPage(){

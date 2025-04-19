@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image"; // Ensure you import Image from next/image
 
 function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>) {
