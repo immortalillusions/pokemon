@@ -3,15 +3,18 @@ import {
     AtSymbolIcon,
     KeyIcon,
     ExclamationCircleIcon,
+    UserPlusIcon
   } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
 import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm(){
     const searchParams = useSearchParams();
+    // go to either the callbackurl (the one we were trying to access when we were logged out and then redirected from) or home
     const callbackUrl = searchParams?.get('callbackUrl') || '/';
     // authenticate is called when the button is pressed (formAction); receives initial state as its arg
     // errorMessage is the new state of the form (bc if it succeeds, it'll redirect)
@@ -19,12 +22,16 @@ export default function LoginForm(){
       authenticate,
       undefined,
     );
+    const router = useRouter();
+    const gotoSignup = () => {
+      router.push('/signup');
+    };  
     return(
         // add form action using useActionState to call server action
-        <form action = {formAction} className="space-y-3">
+      <form action = {formAction} noValidate className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-          <h1 className="font-sans mb-3 text-2xl">
-            Please log in to continue.
+          <h1 className="font-sans mb-3 text-2xl text-center">
+            Login to an account
           </h1>
           <div className="w-full">
             <div>
@@ -67,19 +74,28 @@ export default function LoginForm(){
               </div>
             </div>
           </div>
-        <input type="hidden" name="redirectTo" value={callbackUrl} />
-        <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-        </Button>
+          <input type="hidden" name="redirectTo" value={callbackUrl} />
+          <Button className="mt-4 w-full" aria-disabled={isPending}>
+            Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          </Button>
+          {/* Sign up button */}
+          <Button
+            type="button" // Prevents form submission
+            onClick={gotoSignup}
+            className="mt-3 w-full bg-gray-200 text-gray-700 hover:bg-gray-300"
+          >
+            Go to Signup<UserPlusIcon className="ml-auto h-5 w-5 text-gray-50" />
+          </Button>
           <div className="flex h-8 items-end space-x-1" aria-live="polite"
-          aria-atomic="true">
-            {errorMessage && (
-            <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
-            </>
-          )}
+            aria-atomic="true">
+              {errorMessage && (
+              <>
+                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                <p className="text-sm text-red-500">{errorMessage}</p>
+              </>
+            )}
           </div>
+          
         </div>
       </form>
     )

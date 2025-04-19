@@ -12,6 +12,7 @@ export const authConfig = {
     // authorized callback: receives object with auth and reqeust properties before request is completed
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      //console.log('isLoggedIn:', isLoggedIn);
       const isOnHome = nextUrl.pathname.startsWith('/');
       if (isOnHome) {
         if (isLoggedIn) return true;

@@ -47,7 +47,6 @@ export async function signup(state: FormState, formData: FormData) {
       ON CONFLICT (email) DO NOTHING
       RETURNING email, id;
     `;
-  console.log('insertedEmail', insertedEmail);
   if (insertedEmail === undefined) {
     return {
       errors: { email: ['Email already exists'] },

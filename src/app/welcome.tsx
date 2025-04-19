@@ -18,7 +18,7 @@ const Welcome = async () => {
         <>
               <div className="flex flex-col items-center gap-1 bg-yellow-100 p-2 rounded-lg shadow-md">
                 <div className="font-sans text-3xl sm:text-2xl text-center">
-                Pokemon Game
+                PokiGuess
                 </div>
                 <div className="font-sans text-l sm:text-l text-center">
                 Welcome {user?.name}

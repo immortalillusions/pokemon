@@ -10,13 +10,13 @@ export default function NavComponent({path, text}:{path: string; text: string}) 
           {/* {``} for template literal which allows us to embed dynamic values into string
             * eg. ${pathname === "/"}: if pathname is /, then add bg-yellow-600 class to the button
           */}
-            <button className={`text-white px-4 py-2 rounded-md w-32 hover:bg-yellow-600 transition flex items-center 
-              ${pathname === path ? "bg-yellow-400" : "bg-yellow-500"}`}>
+            <button className={`h-7 text-white py-2 rounded-md w-32 hover:bg-yellow-600 transition flex items-center 
+              ${pathname === path ? "bg-yellow-400 px-2" : "bg-yellow-500 px-4"}`}>
               {/* If pathname is /, show the image; && is conditional rendering not merely an and */}
               {pathname === path && (
                 <img
-                  src="/vercel.svg" // Replace with your image path
-                  alt="Home Icon"
+                  src="/pokeball.webp" 
+                  alt="Pokeball Icon"
                   className="w-4 h-4 mr-2"
                 />
               )}

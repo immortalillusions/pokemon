@@ -16,6 +16,7 @@ export default function Home() {
       */
     <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <Welcome />
+      
       {/* flex flex-col: Uses Flexbox with a vertical column layout.
       gap-[32px]: Adds 32px spacing between child elements. 
       row-start-2: Places <main> in Grid row 2 (the middle row).
