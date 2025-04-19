@@ -12,6 +12,7 @@ export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
   // matcher: specify it should run on specific paths
   // auth logic is applied to all routes except api, static, image, .png files, signup
+  // my pokeball and background was not loading bc i didn't exclude it here
   // protects all routes except^
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup|.*\\.jpeg$|.*\\.webp$).*)'],
 };
