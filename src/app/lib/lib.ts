@@ -1,4 +1,5 @@
 import { SessionOptions } from "iron-session";
+import { z } from 'zod';
 // type
 export interface sessionData {
     userId?: string;
@@ -19,3 +20,27 @@ export const sessionOptions: SessionOptions={
         maxAge: 60 * 60 * 24 * 7, // 1 week
     }
 }
+
+// for signup
+export const SignupFormSchema = z.object({
+    name: z
+      .string()
+      .min(2, { message: 'Name must be at least 2 characters long.' })
+      .trim(),
+    email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+    password: z
+      .string()
+      .min(5, { message: 'Be at least 5 characters long' })
+      .trim(),
+  })
+   
+  export type FormState =
+    | {
+        errors?: {
+          name?: string[]
+          email?: string[]
+          password?: string[]
+        }
+        message?: string
+      }
+    | undefined

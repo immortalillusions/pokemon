@@ -13,10 +13,10 @@ export async function getUser(userId: string | undefined): Promise<User | null> 
     try{
         const data = await sql<User[]>`
             SELECT 
-                users.id AS user_id,
-                users.name AS user_name,
-                users.password AS user_password,
-                users.email AS user_email,
+                users.id AS id,
+                users.name AS name,
+                users.password AS password,
+                users.email AS email,
                 json_agg(
                 json_build_object(
                     'id', pokemon.id,

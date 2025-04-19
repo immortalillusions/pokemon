@@ -1,6 +1,5 @@
 'use server';
 import {getUser} from './lib/db';
-import { User } from './lib/definitions'; // Import User type
 import {getSession} from './lib/actions'; // To get the session
 // i separated this from the main page so that main page could be client side (if desired) bc i cannot pass the session to the main page (client)
 // so i just pass it to this page (server) and then include this as a component within main page
@@ -10,9 +9,9 @@ const Welcome = async () => {
     const userId = session.userId;
 
   try {
-    // Fetch the user data using the reusable getUser function
-    const userData = await getUser(userId);
-    console.log(userData);
+    // Fetch the user data using the getUser function
+    const user = await getUser(userId);
+    console.log(user);
 
     return (
         // p-4 = padding, mt = margin top
@@ -22,7 +21,7 @@ const Welcome = async () => {
                 Pokemon Game
                 </div>
                 <div className="font-sans text-l sm:text-l text-center">
-                Welcome {userData.user_name}
+                Welcome {user?.name}
                 </div>
                 <div className="text-base text-center">
                 <p className = "mb-2">Your username is: <span className="font-sans text-[0.6rem] ml-1">{session.email}</span></p>

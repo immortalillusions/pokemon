@@ -13,6 +13,8 @@ import { useSearchParams } from 'next/navigation';
 export default function LoginForm(){
     const searchParams = useSearchParams();
     const callbackUrl = searchParams?.get('callbackUrl') || '/';
+    // authenticate is called when the button is pressed (formAction); receives initial state as its arg
+    // errorMessage is the new state of the form (bc if it succeeds, it'll redirect)
     const [errorMessage, formAction, isPending] = useActionState(
       authenticate,
       undefined,
@@ -59,7 +61,7 @@ export default function LoginForm(){
                   name="password"
                   placeholder="Enter password"
                   required
-                  minLength={6}
+                  minLength={5}
                 />
                 <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>

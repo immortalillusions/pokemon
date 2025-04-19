@@ -6,10 +6,10 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 async function listUser(user_id: number) {
 	const data = await sql`
         SELECT 
-        users.id AS user_id,
-        users.name AS user_name,
-        users.password AS user_password,
-        users.email AS user_email,
+        users.id AS id,
+        users.name AS name,
+        users.password AS password,
+        users.email AS email,
         json_agg(
             json_build_object(
             'id', pokemon.id,

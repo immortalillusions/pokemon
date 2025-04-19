@@ -1,3 +1,4 @@
+'use server';
 import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
@@ -6,8 +7,10 @@ import {z} from 'zod';
 // query user
 import type { User } from "@/app/lib/definitions";
 import bcrypt from 'bcryptjs';
-import postgres from 'postgres';
 
+import { SignupFormSchema, FormState } from '@/app/lib/lib';
+
+import postgres from 'postgres';
 import { getSession } from './src/app/lib/actions'; // Import getSession function
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -22,6 +25,49 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
+export async function signup(state: FormState, formData: FormData) {
+  // Validate form fields
+  const validatedFields = SignupFormSchema.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+ 
+  // If any form fields are invalid, return early
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const hashedPassword = await bcrypt.hash(validatedFields.data.password, 10);
+  const [insertedEmail, insertedId] = await sql`
+      INSERT INTO users (id, name, email, password)
+      VALUES (uuid_generate_v4(), ${validatedFields.data.name}, ${validatedFields.data.email}, ${hashedPassword})
+      ON CONFLICT (email) DO NOTHING
+      RETURNING email, id;
+    `;
+  console.log('insertedEmail', insertedEmail);
+  if (insertedEmail === undefined) {
+    return {
+      errors: { email: ['Email already exists'] },
+    }
+  }
+  // start session and redirect user to home page
+  // success returns http://localhost:3000/login
+  const success = await signIn('credentials', {
+    email: validatedFields.data.email,
+    password: validatedFields.data.password,
+    redirect: false
+  });
+  if (!success) {
+    return {
+      errors: { email: ['Failed to sign in'] },
+    }
+  }
+  return { redirectTo: '/' };
+
+}
 
 // bcryptjs uses Node.js APIs which isn't in Next.js middleware
 // so we need to export the auth property from NextAuth and not the default export 
