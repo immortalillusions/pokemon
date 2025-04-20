@@ -44,7 +44,7 @@ export default function Collection() {
   }, []);
     return (
       <div className="flex flex-col gap-8 justify-center items-center h-screen">
-        <h1 className="text-3xl font-bold font-sans">Collection Page</h1>
+        <h1 className="text-3xl font-bold font-sans">Collect</h1>
         <p className="text-lg">This is the gacha page</p>
         <div className = "flex flex-col gap-2 font-sans items-center">
           {/* Each element has a specified id */}

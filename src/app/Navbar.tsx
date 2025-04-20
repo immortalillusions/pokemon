@@ -11,7 +11,7 @@ export default async function Navbar() {
       {/* mobile */}
       {session.isLoggedIn && (
         <div className="relative">
-          <div className="block lg:hidden">
+          <div className="block lg:hidden fixed bottom-10 left-10">
           <CircleMenu>
             {/* Pass menu content as children bc logout does serverside stuff and can't be within 
             client component - work around is to pass it in navbar (server) as a prop to circle menu (client) */}
@@ -22,13 +22,13 @@ export default async function Navbar() {
           </CircleMenu>
         </div>
         {/* desktop */}
-        <div className="hidden lg:block fixed bottom-10 right-10 group">
+        <div className="hidden lg:block fixed bottom-10 left-10 group">
         {/* Circle that will be visible */}
         <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300">
           <div className="text-white font-semibold">+</div>
         </div>
         {/* Hidden navbar content (shows when hover over the circle) using GROUP-HOVER */}
-        <div className="font-sans text-[0.5rem] absolute bottom-20 right-0 flex flex-col items-center space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="font-sans text-[0.5rem] absolute bottom-20 left-0 flex flex-col items-center space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <NavComponent path = "/" text = "Home"/>
           <NavComponent path = "/collection" text = "Collection"/>
           <NavComponent path = "/play" text = "Play"/>
