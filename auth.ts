@@ -57,15 +57,14 @@ export async function signup(state: FormState, formData: FormData) {
   const success = await signIn('credentials', {
     email: validatedFields.data.email,
     password: validatedFields.data.password,
-    redirect: false
+    redirect: true,
+    redirectTo: "/"
   });
   if (!success) {
     return {
       errors: { email: ['Failed to sign in'] },
     }
   }
-  return { redirectTo: '/' };
-
 }
 
 // bcryptjs uses Node.js APIs which isn't in Next.js middleware
@@ -98,6 +97,6 @@ export const { auth, signIn, signOut } = NextAuth({
               }
               console.log("invalid credentials");
               return null;
-        }
-    })]
+        },
+    })],
 });

@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth';
 import { authConfig } from '../auth.config';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+
 
 // MIDDLEWARE NEEDS TO BE IN THE SAME LEVEL AS APP (so in root or under src)
 // initialize NextAuth with authConfig object and exporting the auth property
@@ -14,5 +13,5 @@ export const config = {
   // auth logic is applied to all routes except api, static, image, .png files, signup
   // my pokeball and background was not loading bc i didn't exclude it here
   // protects all routes except^
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup|.*\\.jpeg$|.*\\.webp$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup|.*\\.jpeg$|.*\\.webp$|.*\\.ico$).*)'],
 };

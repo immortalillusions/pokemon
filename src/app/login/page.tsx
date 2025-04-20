@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import LoginForm from "./login-form";
+import Image from "next/image";
 // maybe later ill add a loading spinner for suspense
 export default function LoginPage(){
     return (
@@ -9,11 +10,12 @@ export default function LoginPage(){
                 <div className="flex h-30 w-full items-center justify-center rounded-lg bg-yellow-400 p-3">
                     <div className="flex w-full h-full items-center justify-center text-white space-x-5">
                         {/* <CommandLineIcon className="w-50 h-50" /> */}
-                        <img
+                        <Image
                             src="/pokeball.webp" 
                             alt="Pokeball"
-                            className="w-12"
-                            />
+                            width={48}
+                            height={48}
+                        />
                         <p className="text-[2rem] font-sans text-center leading-none">
                         PokiGuess
                         </p>

@@ -3,7 +3,7 @@ import postgres from 'postgres';
 // ensures the postgresql connection is created only once bc not in any function/conponent
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
-async function listUser(user_id: number) {
+async function listUser(user_id: string) {
 	const data = await sql`
         SELECT 
         users.id AS id,
@@ -33,9 +33,9 @@ export async function GET(request: Request) {
   try {
     // Extract user_id from the query parameters
     const { searchParams } = new URL(request.url);
-    const user_id = parseInt(searchParams.get('user_id') || '', 10);
+    const user_id = searchParams.get('user_id');
 
-    if (isNaN(user_id)) {
+    if (!(user_id)) {
       return Response.json({ error: 'Invalid or missing user_id' }, { status: 400 });
     }
 

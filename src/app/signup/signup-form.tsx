@@ -12,12 +12,6 @@ export function SignupForm() {
     // Redirect to home page if signup is successful
     // only triggered when one of its dependencies changes (state, pending, router)
     // when signup form first renders, state object is undefined so if statement is false
-    useEffect(() => {
-        if (state?.redirectTo && !pending) {
-            console.log('Redirecting to:', state.redirectTo);
-            router.push(state.redirectTo); // Perform navigation
-        }
-    }, [state, pending, router]);
 
     const gotoLogin = () => {
       router.push('/login'); // Redirect to login page

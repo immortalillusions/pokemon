@@ -1,4 +1,5 @@
 "use client"; // This component is a client component
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // To get the current path
 
@@ -14,11 +15,13 @@ export default function NavComponent({path, text}:{path: string; text: string}) 
               ${pathname === path ? "bg-yellow-400 px-2" : "bg-yellow-500 px-4"}`}>
               {/* If pathname is /, show the image; && is conditional rendering not merely an and */}
               {pathname === path && (
-                <img
-                  src="/pokeball.webp" 
-                  alt="Pokeball Icon"
-                  className="w-4 h-4 mr-2"
-                />
+                  <Image
+                    src="/pokeball.webp" 
+                    alt="Pokeball"
+                    width={16}
+                    height={16}
+                    className="mr-2" // Add margin to the right of the image
+                  />
               )}
               {text}
             </button>

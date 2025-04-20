@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "autoprefixer": "^10.4.21",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
     "cookies-next": "^5.1.0",
     "iron-session": "^8.0.4",
     "next": "15.2.4",
     "next-auth": "^5.0.0-beta.25",
+    "postcss": "^8.5.3",
     "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -29,7 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.4",
     "typescript": "^5"
   }
 }

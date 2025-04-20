@@ -1,9 +1,48 @@
 import postgres from 'postgres';
-import { User } from './definitions'; // Import the User type definition
+import { User, Pokemon } from './definitions'; // Import the User type definition
+
+// note these backend/postgres functions cannot be called to frontend (else "can't resolve net")
+// so either call it on server "use server" or API route
 
 // Create a single PostgreSQL connection instance
 // bad to repeatedly create db connection
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+// returns true if a new pokemon was found by player
+export async function addPokemon(pokeId: number, userId: string, shiny: boolean): Promise<boolean> {
+    // returns a 1 for each matching row (this will either be empty or 1)
+    const matches = await sql`SELECT 1 FROM pokemon WHERE (user_id = ${userId} AND id = ${pokeId})`;
+    const date = new Date(); // get current date
+    // new pokemon found
+    if (matches.length === 0) {
+        // if no matches, insert new pokemon along with the date it was discovered for first time
+        if (shiny){
+            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date) VALUES (${userId}, ${pokeId}, 1, 0, ${date})`;
+        } else {
+            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date) VALUES (${userId}, ${pokeId}, 0, 1, ${date})`;
+        }
+        return true
+    }  
+    if (shiny){
+        await sql`UPDATE pokemon SET shiny = shiny + 1 WHERE (user_id = ${userId} AND id = ${pokeId})`;
+    } else {
+        await sql`UPDATE pokemon SET normal = normal + 1 WHERE (user_id = ${userId} AND id = ${pokeId})`;
+    }
+    return false
+}
+
+export async function getUserPokemonInfo(id: number, userId: string): Promise<Pokemon> {
+    const poke = await sql<Pokemon[]>`
+        SELECT 
+            id,
+            date,
+            shiny,
+            normal
+        FROM pokemon
+        WHERE user_id = ${userId} AND id = ${id};
+    `;
+    return poke[0]; // Return the pokemon
+}
 
 // Function to fetch user data by user ID
 export async function getUser(userId: string | undefined): Promise<User | null> {
@@ -41,6 +80,5 @@ export async function getUser(userId: string | undefined): Promise<User | null> 
         }
     
   }
-
 
 export default sql;

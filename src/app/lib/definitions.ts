@@ -1,7 +1,7 @@
 // Define the structure of a Pokémon
 export type Pokemon = {
     id: number;
-    date: string;
+    date: Date;
     shiny: number;
     normal: number;
   };

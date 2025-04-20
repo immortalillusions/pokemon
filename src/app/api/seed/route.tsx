@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import postgres from 'postgres';
-import {users} from '../lib/data';
-import {Pokemon, User} from '../lib/definitions';
+import {users} from '../../lib/data';
+import {Pokemon, User} from '../../lib/definitions';
 // if alr seeded, will return {"error":"Cannot read properties of undefined (reading 'id')"}
 
 // This file is used to seed the database with initial data

@@ -19,7 +19,7 @@ export default async function Navbar() {
         <div className="font-sans text-[0.5rem] absolute bottom-20 right-0 flex flex-col items-center space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <NavComponent path = "/" text = "Home"/>
           <NavComponent path = "/collection" text = "Collection"/>
-          <NavComponent path = "/profile" text = "Profile"/>
+          <NavComponent path = "/play" text = "Play"/>
           <Logout/>
         </div>
       </div>
