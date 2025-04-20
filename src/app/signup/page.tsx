@@ -15,7 +15,7 @@ export default function LoginPage(){
                             width={48}
                             height={48}
                         />
-                        <p className="text-[2rem] font-sans text-center leading-none">
+                        <p className="text-2xl md:text-[2rem] font-sans text-center leading-none">
                         PokiGuess
                         </p>
                     </div>

@@ -4,7 +4,7 @@ import FlipPikachu from "../flipPikachu";
 import { useState } from "react";
 
 async function generatePokemon(setPoke_Id: React.Dispatch<React.SetStateAction<number | undefined>>, 
-  shiny: boolean, setShiny: React.Dispatch<React.SetStateAction<boolean>>,
+setShiny: React.Dispatch<React.SetStateAction<boolean>>,
   setSrc: React.Dispatch<React.SetStateAction<string>>,
   setName: React.Dispatch<React.SetStateAction<string | undefined>>,
   setType: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -89,7 +89,7 @@ export default function Play() {
   // button cooldown
   const [isCooldown, setIsCooldown] = useState(false); 
   const handleClick = () => {
-    generatePokemon(setPoke_Id, shiny, setShiny, setSrc, setName, setType, setSound);
+    generatePokemon(setPoke_Id, setShiny, setSrc, setName, setType, setSound);
 
     setIsCooldown(true); // Disable the button
     setTimeout(() => {
@@ -139,41 +139,5 @@ export default function Play() {
 
       </div>
     </div>
-    // <div className="flex justify-center items-center h-screen">
-    //   {/* Fixed-size container for the background */}
-    //   <div
-    //     className="relative border-4 border-yellow-500 rounded-lg"
-    //     style={{
-    //       width: "1235px", // Set the width of the background image
-    //       height: "700px", // Set the height of the background image
-    //       backgroundImage: "url('/pokedex.png')", // Set the background image
-    //       backgroundSize: "contain", // Ensure the image fits within the container
-    //       backgroundRepeat: "no-repeat", // Prevent the image from repeating
-    //       backgroundPosition: "center", // Center the image within the container
-    //     }}
-    //   >
-    //     {/* Add elements inside the fixed background */}
-    //     <h1
-    //       className="absolute text-3xl font-bold font-sans"
-    //       style={{ top: "50px", left: "100px" }} // Position the element within the background
-    //     >
-    //       Start Game
-    //     </h1>
-    //     <p
-    //       className="absolute text-lg"
-    //       style={{ top: "596px", left: "595px" }} // Position the element within the background
-    //     >
-    //       This is the player
-    //     </p>
-    //     <Image
-    //       src="/pokeball.webp"
-    //       alt="Pokeball"
-    //       width={48}
-    //       height={48}
-    //       className="absolute"
-    //       style={{ top: "250px", left: "100px" }} // Position the image within the background
-    //     />
-    //   </div>
-    // </div>
   );
 }

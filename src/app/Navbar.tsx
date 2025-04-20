@@ -1,16 +1,28 @@
 import NavComponent from "./nav-element";
 import Logout from './login/logout'; // To sign out the user
 import { getSession } from "@/app/lib/actions"; // To get the session
+import CircleMenu from "./CircleMenu"; // To show the circle menu when logged in
 
 export default async function Navbar() {
   const session = await getSession(); // Get the session to check if the user is logged in
   return (
     <div>
-    {/* only show navbar when logged in */}
-    {session.isLoggedIn && <div className="relative">
-      {/* group: groups the circle and hidden navbar content together so they can be hovered together
-      */}
-      <div className="fixed bottom-10 right-10 group">
+      {/* Only show navbar when logged in */}
+      {/* mobile */}
+      {session.isLoggedIn && (
+        <div className="relative">
+          <div className="block lg:hidden">
+          <CircleMenu>
+            {/* Pass menu content as children bc logout does serverside stuff and can't be within 
+            client component - work around is to pass it in navbar (server) as a prop to circle menu (client) */}
+            <NavComponent path="/" text="Home" />
+            <NavComponent path="/collection" text="Collection" />
+            <NavComponent path="/play" text="Play" />
+            <Logout />
+          </CircleMenu>
+        </div>
+        {/* desktop */}
+        <div className="hidden lg:block fixed bottom-10 right-10 group">
         {/* Circle that will be visible */}
         <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300">
           <div className="text-white font-semibold">+</div>
@@ -23,7 +35,8 @@ export default async function Navbar() {
           <Logout/>
         </div>
       </div>
-    </div>}
     </div>
+  )}
+  </div>
   );
 }
