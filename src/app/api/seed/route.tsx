@@ -37,7 +37,12 @@ async function seedUsers(sql: postgres.TransactionSql<{}>) {
         ON CONFLICT (id) DO NOTHING
         RETURNING id;
       `;
-      return { ...user, id: insertedUser.id }; // Attach the generated ID to the user object
+      // Convert `pokemon.date` from string to Date
+      const pokemonWithDate = user.pokemon.map((poke) => ({
+        ...poke,
+        date: new Date(poke.date), // Convert string to Date
+      }));
+      return { ...user, id: insertedUser.id, pokemon: pokemonWithDate }; // Attach the generated ID to the user object
     }),
   );
 

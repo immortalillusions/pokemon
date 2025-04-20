@@ -31,6 +31,7 @@ async function listUser(user_id: string) {
 // API route to handle GET requests
 export async function GET(request: Request) {
   try {
+    // UPDATE THIS LATER TO JUST GET DIRECTLY FROM SESSION
     // Extract user_id from the query parameters
     const { searchParams } = new URL(request.url);
     const user_id = searchParams.get('user_id');
