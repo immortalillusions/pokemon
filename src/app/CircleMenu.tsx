@@ -10,7 +10,7 @@ export default function CircleMenu({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <div className="fixed bottom-10 left-10">
+    <div className="fixed bottom-2 left-2">
       {/* Circle that will be visible */}
       <div
         onClick={toggleMenu} // Toggle menu on click

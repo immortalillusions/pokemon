@@ -11,7 +11,7 @@ export default async function Navbar() {
       {/* mobile */}
       {session.isLoggedIn && (
         <div className="relative">
-          <div className="block lg:hidden fixed bottom-10 left-10">
+          <div className="block lg:hidden fixed bottom-2 left-2">
           <CircleMenu>
             {/* Pass menu content as children bc logout does serverside stuff and can't be within 
             client component - work around is to pass it in navbar (server) as a prop to circle menu (client) */}
