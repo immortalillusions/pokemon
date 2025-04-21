@@ -39,3 +39,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Cookies do not expire. Guest accounts will be deleted if the account is switched out to save space on database (deleted from users and pokemon db). This ensures there are no "stale" guest accounts.
 Iron session was used with NextAuth to store user data.
 Custom API for accessing database with GET and POST so that postgres connection is established minimal number of times
+Need to include cookies with headers: { Cookie: cookies().toString() } for server side fetch

@@ -1,23 +1,28 @@
-"use client"; // This component is a client component
-import { useState } from "react";
+"use server"; // This component is a server component
+import Inventory from "./inventory"; // Import the Inventory component
+import { cookies } from "next/headers";
 
-export default function Collection() {
-  // Mock inventory data (replace with your actual data)
-  const inventory = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
+export default async function Collection() {
+  try {
+      console.log("Fetching user data...");
+      // Construct the absolute URL for the API call
+      // NOTE NEED TO UPDATE THE URLS FOR PRODUCTION
+      const baseUrl = process.env.NODE_ENV === "production"? process.env.PUBLIC_BASE_URL: "http://localhost:3000"; // Use environment variable or fallback to localhost
+      const response = await fetch(`${baseUrl}/api/queryUser`, {
+        method: "GET",
+        headers: { Cookie: cookies().toString() }, // include cookies in request (bc this is server side)
+      });
 
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const data = await response.json();
+      console.log("User data:", data);
+  } catch (error) {
+    console.error("Error:", error);
+  }
   return (
-    <div className="flex justify-center items-center h-screen">
-      {/* Inventory Box */}
-      <div className="w-[26.5rem] h-[26.5rem] grid grid-cols-3 gap-4 overflow-y-scroll bg-[#D30A40] border border-gray-300 rounded-lg p-4">
-        {inventory.map((item, index) => (
-          <div
-            key={index}
-            className="w-[7.5rem] h-[7.5rem] flex items-center justify-center bg-yellow-200 border border-yellow-300 rounded-md p-2"
-          >
-            {item}
-          </div>
-        ))}
-      </div>
-    </div>
+    <Inventory/>
   );
 }

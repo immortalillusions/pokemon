@@ -33,11 +33,9 @@ async function listUser(user_id: string) {
 // API route to handle GET requests
 export async function GET(request: Request) {
   try {
-    // UPDATE THIS LATER TO JUST GET DIRECTLY FROM SESSION
     const session = await getSession();
     const isLoggedIn = session.isLoggedIn; 
     const user_id = session.userId;
-    
     // no user id means not logged in
     if (!(user_id)) {
       return Response.json({});
