@@ -1,10 +1,12 @@
 import NavComponent from "./nav-element";
 import Logout from './login/logout'; // To sign out the user
+import RedirectToSignup from "./signup/guest-signup";
 import { getSession } from "@/app/lib/actions"; // To get the session
 import CircleMenu from "./CircleMenu"; // To show the circle menu when logged in
 
 export default async function Navbar() {
   const session = await getSession(); // Get the session to check if the user is logged in
+  console.log("Navbar session: ", session); // For debugging purposes
   return (
     <div>
       {/* Only show navbar when logged in */}
@@ -18,7 +20,7 @@ export default async function Navbar() {
             <NavComponent path="/" text="Home" />
             <NavComponent path="/collection" text="Collection" />
             <NavComponent path="/play" text="Play" />
-            <Logout />
+            {session.guest_created === null ? <Logout /> : <RedirectToSignup />}
           </CircleMenu>
         </div>
         {/* desktop */}
@@ -32,7 +34,7 @@ export default async function Navbar() {
           <NavComponent path = "/" text = "Home"/>
           <NavComponent path = "/collection" text = "Collection"/>
           <NavComponent path = "/play" text = "Play"/>
-          <Logout/>
+          {session.guest_created === null ? <Logout /> : <RedirectToSignup />}
         </div>
       </div>
     </div>

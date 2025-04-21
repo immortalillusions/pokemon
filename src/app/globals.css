@@ -13,6 +13,15 @@
   }
 }
 
+@keyframes spin-custom {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

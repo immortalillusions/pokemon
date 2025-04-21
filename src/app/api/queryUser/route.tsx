@@ -1,4 +1,5 @@
 import postgres from 'postgres';
+import { getSession } from '../../lib/actions'; // Adjust the import path as necessary
 // api route
 // ensures the postgresql connection is created only once bc not in any function/conponent
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -17,7 +18,8 @@ async function listUser(user_id: string) {
             'shiny', pokemon.shiny,
             'normal', pokemon.normal
             )
-        ) AS pokemon
+        ) AS pokemon,
+        users.guest_created AS guest_created
         FROM users
         LEFT JOIN pokemon ON users.id = pokemon.user_id
         WHERE users.id = ${user_id}
@@ -32,12 +34,12 @@ async function listUser(user_id: string) {
 export async function GET(request: Request) {
   try {
     // UPDATE THIS LATER TO JUST GET DIRECTLY FROM SESSION
-    // Extract user_id from the query parameters
-    const { searchParams } = new URL(request.url);
-    const user_id = searchParams.get('user_id');
-
+    const session = await getSession();
+    const isLoggedIn = session.isLoggedIn; 
+    const user_id = session.userId;
+    // no user id means not logged in
     if (!(user_id)) {
-      return Response.json({ error: 'Invalid or missing user_id' }, { status: 400 });
+      return Response.json({});
     }
 
     // Fetch user data
@@ -47,7 +49,7 @@ export async function GET(request: Request) {
       return Response.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return Response.json(user);
+    return Response.json( {...user, isLoggedIn});
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
     return Response.json({ error: errorMessage }, { status: 500 });

@@ -8,7 +8,7 @@ async function handleFlip(isFlipped: boolean, setIsFlipped: React.Dispatch<React
     setIsFlipped(!isFlipped); // Toggle the state
     // get user data (everything)
     try {
-      const response = await fetch("/api/queryUser?user_id=8d6036e6-e13d-4505-a037-e22d20d20ef9", {
+      const response = await fetch("/api/queryUser", {
         method: "GET",
       });
   

@@ -8,6 +8,8 @@ import {z} from 'zod';
 import type { User } from "@/app/lib/definitions";
 import bcrypt from 'bcryptjs';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { SignupFormSchema, FormState } from '@/app/lib/lib';
 
 import postgres from 'postgres';
@@ -23,6 +25,50 @@ async function getUser(email: string): Promise<User | undefined> {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
+}
+
+export async function noAccount(){
+  
+  let success = false;
+  let uniqueEmail;
+  // save sign up date for guest
+  const guest_date= Date.now();
+  const password = uuidv4(); // Generate a random password
+  const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+  // ensure a unique email is generated
+  while (!success) {
+    try {
+      uniqueEmail = `guest_${uuidv4()}@gmail.com`;
+      // if not unique, will throw error
+      await sql`
+        INSERT INTO users (id, name, email, password, guest_created)
+        VALUES (uuid_generate_v4(), 'Guest', ${uniqueEmail}, ${hashedPassword}, ${guest_date})
+      `;
+      success = true;
+    } catch (error) {
+      const typedError = error as { code?: string };
+      // Check if the error is due to a duplicate email
+      if (typedError.code === '23505') {
+        // 23505 is the PostgreSQL error code for unique constraint violations
+        console.warn(`Duplicate email generated: ${uniqueEmail}. Retrying...`);
+      } else {
+        throw new Error('Failed to create guest account.');
+      }
+    }
+  }
+
+  const successLogin = await signIn('credentials', {
+    email: uniqueEmail,
+    password: password,
+    redirect: true,
+    redirectTo: "/"
+  });
+  if (!successLogin) {
+    return {
+      errors: { email: ['Failed to sign in'] },
+    }
+  }
+
 }
 
 export async function signup(state: FormState, formData: FormData) {
@@ -41,12 +87,38 @@ export async function signup(state: FormState, formData: FormData) {
   }
 
   const hashedPassword = await bcrypt.hash(validatedFields.data.password, 10);
-  const [insertedEmail, insertedId] = await sql`
+  
+  // check if this is guest account
+  const session = await getSession();
+  const guest_created = session.guest_created; // Get the guest creation date from the session
+  let insertedEmail;
+  let insertedId;
+  if (guest_created === null) {
+      [insertedEmail, insertedId] = await sql`
       INSERT INTO users (id, name, email, password)
       VALUES (uuid_generate_v4(), ${validatedFields.data.name}, ${validatedFields.data.email}, ${hashedPassword})
       ON CONFLICT (email) DO NOTHING
       RETURNING email, id;
     `;
+  } else {
+    if (session.userId === undefined) {
+      return {
+        errors: { email: ['Session has no user id'] },
+      }
+    }
+    // new guest
+    [insertedEmail, insertedId] = await sql`
+      UPDATE users
+      SET 
+        name = ${validatedFields.data.name},
+        email = ${validatedFields.data.email},
+        password = ${hashedPassword},
+        guest_created = null
+      WHERE id = ${session.userId}
+      RETURNING email, id;
+    `;
+  }
+  
   if (insertedEmail === undefined) {
     return {
       errors: { email: ['Email already exists'] },
@@ -88,9 +160,17 @@ export const { auth, signIn, signOut } = NextAuth({
                 if (passwordMatch) {
                     // Save user ID in a session
                     const session = await getSession(); // Get the session object
+
+                    // delete the guest account if we're switching accounts
+                    if (session.userId !== user.id && session.guest_created !== null && session.guest_created !== undefined && session.userId !== undefined) {
+                      await sql`DELETE FROM users WHERE id = ${session.userId}`;
+                      await sql`DELETE FROM pokemon WHERE user_id = ${session.userId}`;
+                      
+                    }
                     session.userId = user.id; // Set the user ID in the session
                     session.email = user.email; // Set the email in the session
                     session.isLoggedIn = true; // Set the logged-in status in the session
+                    session.guest_created = user.guest_created; // Set the guest creation date in the session
                     await session.save(); // Save the session to persist the user ID in a cookie
                     return user; // Return the user object
                   }

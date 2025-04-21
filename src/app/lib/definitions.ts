@@ -13,4 +13,5 @@ export type Pokemon = {
     email: string;
     password: string;
     pokemon: Pokemon[];
+    guest_created?: Date;
   };

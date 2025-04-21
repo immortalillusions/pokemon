@@ -11,6 +11,7 @@ import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import {noAccount} from '../../../auth'
 
 export default function LoginForm(){
     const searchParams = useSearchParams();
@@ -85,6 +86,14 @@ export default function LoginForm(){
             className="mt-3 w-full bg-gray-200 text-gray-700 hover:bg-gray-300"
           >
             Go to Signup<UserPlusIcon className="ml-auto h-5 w-5 text-gray-50" />
+          </Button>
+          {/* Sign up button */}
+          <Button
+            type="button" // Prevents form submission
+            onClick={noAccount}
+            className="mt-3 w-full bg-gray-200 text-gray-700 hover:bg-gray-300"
+          >
+            Continue without an account<ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
           </Button>
           <div className="flex h-8 items-end space-x-1" aria-live="polite"
             aria-atomic="true">

@@ -4,6 +4,7 @@ import { z } from 'zod';
 export interface sessionData {
     userId?: string;
     email?: string;
+    guest_created?: Date;
     isLoggedIn: boolean;
 }
 
@@ -17,7 +18,7 @@ export const sessionOptions: SessionOptions={
     cookieOptions: {
         httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
         secure: process.env.NODE_ENV === "production", // false in local host and true in production
-        maxAge: 60 * 60 * 24 * 7, // 1 week
+        // no expiration: maxAge: 60 * 60 * 24 * 7, // 1 week
     }
 }
 
