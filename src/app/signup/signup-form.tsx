@@ -176,6 +176,19 @@ export function SignupForm() {
             >
               Go to Login<ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
             </Button>)}
+            {/* If it is guest, warn that guest account will be lost*/}
+            {!isNotGuest && (<Button
+              type="button" // Prevents form submission
+              onClick={gotoLogin}
+              className="mt-3 w-full bg-gray-200 text-gray-700 hover:bg-gray-300 text-left"
+            >
+              <span>
+                Go to Login
+                <br />
+                <span className="text-red-500 font-bold">Changing Accounts Will Delete Guest</span>
+              </span>
+              <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+            </Button>)}
           </div>
         </form>
         </div>

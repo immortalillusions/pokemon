@@ -37,6 +37,7 @@ export async function GET(request: Request) {
     const session = await getSession();
     const isLoggedIn = session.isLoggedIn; 
     const user_id = session.userId;
+    
     // no user id means not logged in
     if (!(user_id)) {
       return Response.json({});
