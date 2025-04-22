@@ -4,6 +4,11 @@ export type Pokemon = {
     date: Date;
     shiny: number;
     normal: number;
+    sprite?: string;
+    name?: string;
+    type?: string;
+    sound?: string; // .ogg
+    description?: string; // Description of the Pokemon
   };
   
   // Define the structure of a user

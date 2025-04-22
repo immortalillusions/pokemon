@@ -2,6 +2,7 @@
 import Image from "next/image";
 import FlipPikachu from "../flipPikachu";
 import { useState } from "react";
+import { getPokemonData } from "../lib/actions"; // Import the function to fetch Pokémon data
 
 async function generatePokemon(setPoke_Id: React.Dispatch<React.SetStateAction<number | undefined>>, 
 setShiny: React.Dispatch<React.SetStateAction<boolean>>,
@@ -45,35 +46,12 @@ setShiny: React.Dispatch<React.SetStateAction<boolean>>,
     }
 
     const data = await response.json();
-    console.log("New pokemon: ", data);
+   // console.log("New pokemon: ", data);
   } catch (error) {
     console.error("Error:", error);
   }
 
 }
-// access pokemon API (maybe move to an api route/backend instead?)
-async function getPokemonData(pokemonId: number, shiny: boolean) {
-  const url = `https://pokeapi.co/api/v2/pokemon/${pokemonId}/`;
-  try {
-    const response = await fetch(url);
-    if (response.ok) {
-      const data = await response.json();
-      return {
-        name: data.name,
-        sprite: shiny ? data.sprites.front_shiny : data.sprites.front_default,
-        type: data.types[0].type.name,
-        sound: data.cries.latest, // .ogg
-      };
-    } else {
-      console.error("Failed to fetch data:", response.status);
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching Pokémon data:", error);
-    return null;
-  }
-}
-
 
 // potential solution to make this mobile compatible
 //  button/text screen on right as separate image (this is good size for mobile) (crop pokedex.png)

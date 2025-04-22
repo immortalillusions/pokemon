@@ -8,6 +8,38 @@ import { cookies } from 'next/headers';
 import { getIronSession } from 'iron-session';
 import { defaultSession } from './lib'; // Import default session data
 
+// access pokemon API (maybe move to an api route/backend instead?)
+export async function getPokemonData(pokemonId: number, shiny: boolean) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${pokemonId}/`;
+  // get species description
+  const url2 = `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}/`;
+  try {
+    const response = await fetch(url);
+    const response2 = await fetch(url2);
+    if (response.ok && response2.ok) {
+      const data = await response.json();
+      const data2 = await response2.json();
+      return {
+        name: data.name,
+        sprite: shiny ? data.sprites.front_shiny : data.sprites.front_default,
+        type: data.types[0].type.name,
+        sound: data.cries.latest, // .ogg
+        description: data2.flavor_text_entries[0].flavor_text
+          .replace(/\s+/g, " ") // Remove non ASCII and get the first flavor text entry
+          .replace(/POKéMON/g, "Pokémon")
+          .replace(/\b[A-Z]+\b/g, (word: string) => word.charAt(0) + word.slice(1).toLowerCase()) // Convert remaining all-uppercase words to Title Case
+          .replace(/-\s+/g, "-"), // Remove spaces after hyphens
+      };
+    } else {
+      console.error("Failed to fetch data:", response.status && response2.status);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching Pokémon data:", error);
+    return null;
+  }
+}
+
 export const getSession = async ()=>{
   "use server";
   // decrypt cookies with sessionOptions definition
