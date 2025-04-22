@@ -111,7 +111,7 @@ export default function Play() {
           border-2 border-yellow-500 text-white flex justify-center items-center text-[0.5rem] md:text-[0.85rem]
           text-center rounded-lg break-words"
         >
-          {poke_Id} {shiny ? "Shiny" : "Not Shiny"} {type} {name}
+          {poke_Id} {type} {shiny ? "Shiny" : ""} {name}
         </div>
         
 

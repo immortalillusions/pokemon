@@ -6,25 +6,30 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 async function listUser(user_id: string) {
 	const data = await sql`
-        SELECT 
-        users.id AS id,
-        users.name AS name,
-        users.password AS password,
-        users.email AS email,
-        json_agg(
-            json_build_object(
-            'id', pokemon.id,
-            'date', pokemon.date,
-            'shiny', pokemon.shiny,
-            'normal', pokemon.normal
-            )
-        ) AS pokemon,
-        users.guest_created AS guest_created
-        FROM users
-        LEFT JOIN pokemon ON users.id = pokemon.user_id
-        WHERE users.id = ${user_id}
-        GROUP BY users.id;
-  `;
+              SELECT 
+                  users.id AS id,
+                  users.name AS name,
+                  users.password AS password,
+                  users.email AS email,
+                  json_agg(
+                  json_build_object(
+                      'id', pokemon.id,
+                      'date', pokemon.date,
+                      'shiny', pokemon.shiny,
+                      'normal', pokemon.normal,
+                      'name', pokemon.name,
+                      'sprite_shiny', pokemon.sprite_shiny,
+                      'sprite_normal', pokemon.sprite_normal,
+                      'type', pokemon.type,
+                      'sound', pokemon.sound,
+                      'description', pokemon.description
+                  )
+                  ) AS pokemon
+              FROM users
+              LEFT JOIN pokemon ON users.id = pokemon.user_id
+              WHERE users.id = ${user_id}
+              GROUP BY users.id;
+              `;
 
 	return data[0] || null; // Return the first user or null if not found
 }

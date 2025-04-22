@@ -5,6 +5,8 @@ export type Pokemon = {
     shiny: number;
     normal: number;
     sprite?: string;
+    sprite_shiny?: string;
+    sprite_normal?: string;
     name?: string;
     type?: string;
     sound?: string; // .ogg

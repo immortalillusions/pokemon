@@ -1,5 +1,5 @@
 import {addPokemon} from "../../lib/db";
-import {getSession} from "../../lib/actions"; // To get the session
+import {getSession, getPokemonData} from "../../lib/actions"; // To get the session
 // data is sent in the request body for POST vs query params for GET
 export async function POST(request: Request) {
   try {
@@ -11,12 +11,14 @@ export async function POST(request: Request) {
     const pokeId = body.pokeId;
     const shiny = body.shiny;
 
+    const pokemonData = await getPokemonData(pokeId, shiny);
+
     if (!(user_id) || !(pokeId)) {
       return Response.json({ error: 'Invalid or missing userId, pokeId' }, { status: 400 });
     }
 
     // Fetch user data
-    const newPokemon = await addPokemon(pokeId, user_id, shiny);
+    const newPokemon = await addPokemon(pokeId, user_id, shiny, pokemonData?.name, pokemonData?.sprite_shiny, pokemonData?.sprite_normal, pokemonData?.type, pokemonData?.sound, pokemonData?.description);
 
     return Response.json(newPokemon, { status: 200 });
   } catch (error) {

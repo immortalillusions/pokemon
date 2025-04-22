@@ -53,15 +53,15 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
             <div className="w-[90%] h-[90%] grid grid-rows-2 justify-center items-center bg-yellow-200 border border-yellow-300 rounded-md p-2">
             <div className="flex flex-row items-center justify-center h-full">
               <div className="flex flex-col justify-center w-[60%]">
-                <h2 className="text-center text-lg font-bold font-sans">{curPokemon?.name}</h2> {/* Pokémon name */}
-                <p className="text-center">{curPokemon?.type} Type</p> {/* Pokémon type */}
-                <p className="text-center">Pokedex ID: {curPokemon?.id}</p> {/* Pokémon ID */}
-                <p className="text-center">Found: {curPokemon?.date ? new Date(curPokemon?.date).toLocaleDateString("en-US", {
+                <h2 className="text-center text-l font-bold font-sans">{curPokemon?.name}</h2> {/* Pokémon name */}
+                <p className="text-center text-sm">{curPokemon?.type} Type</p> {/* Pokémon type */}
+                <p className="text-center text-sm">Pokedex ID: {curPokemon?.id}</p> {/* Pokémon ID */}
+                <p className="text-center text-sm">Discovered: {curPokemon?.date ? new Date(curPokemon?.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",}): ""}</p> {/* Date discovered*/}
-                <p className="text-center">Normal Caught: {curPokemon?.normal}</p> {/* Number of normal */}
-                <p className="text-center">Shiny Caught: {curPokemon?.shiny}</p> {/* Number of shinies */}
+                <p className="text-center text-sm">Normal Caught: {curPokemon?.normal}</p> {/* Number of normal */}
+                <p className="text-center text-sm">Shiny Caught: {curPokemon?.shiny}</p> {/* Number of shinies */}
               </div>
               <Image
                   src={curPokemon?.sprite || "/pokeball.webp"} // Use the sprite URL for the image or a placeholder
@@ -78,14 +78,20 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
                   {/* Add content for the large box here */}
                   <p className="text-center">{curPokemon?.description}</p> {/* Pokémon description */}
                 </div>
-                {/* Button */}
-                <button
-                  type="button"
-                  onClick={() => closePokemon(setShowDetails)} // Handle click event
-                  className="w-[12%] aspect-square flex justify-center items-center bg-yellow-400 border hover:bg-yellow-500 border-yellow-300 rounded-md mt-2"
-                >
-                  Back
-                </button>
+                <div className = "flex flex-row mt-2 w-full justify-between items-center">
+                  <audio controls className="w-[80%] h-[80%]">
+                    <source src={curPokemon?.sound} type="audio/ogg" /> {/* Pokémon sound */}
+                    Your browser does not support the audio element.
+                  </audio>
+                    {/* Back Button */}
+                    <button
+                      type="button"
+                      onClick={() => closePokemon(setShowDetails)} // Handle click event
+                      className="w-[3rem] h-[3rem] flex justify-center items-center bg-yellow-400 hover:bg-yellow-500 rounded-md"
+                    >
+                      Back
+                    </button>
+                </div>
               </div>
             </div>
           </div>

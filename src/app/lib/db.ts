@@ -9,7 +9,8 @@ import { User, Pokemon } from './definitions'; // Import the User type definitio
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 // returns true if a new pokemon was found by player
-export async function addPokemon(pokeId: number, userId: string, shiny: boolean): Promise<boolean> {
+export async function addPokemon(pokeId: number, userId: string, shiny: boolean, name: string, sprite_shiny: string,
+    sprite_normal: string, type: string, sound: string, description: string): Promise<boolean> {
     // returns a 1 for each matching row (this will either be empty or 1)
     const matches = await sql`SELECT 1 FROM pokemon WHERE (user_id = ${userId} AND id = ${pokeId})`;
     const date = new Date(); // get current date
@@ -17,9 +18,9 @@ export async function addPokemon(pokeId: number, userId: string, shiny: boolean)
     if (matches.length === 0) {
         // if no matches, insert new pokemon along with the date it was discovered for first time
         if (shiny){
-            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date) VALUES (${userId}, ${pokeId}, 1, 0, ${date})`;
+            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date, name, sprite_shiny, sprite_normal, type, sound, description) VALUES (${userId}, ${pokeId}, 1, 0, ${date}, ${name}, ${sprite_shiny}, ${sprite_normal}, ${type}, ${sound}, ${description})`;
         } else {
-            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date) VALUES (${userId}, ${pokeId}, 0, 1, ${date})`;
+            await sql`INSERT INTO pokemon (user_id, id, shiny, normal, date, name, sprite_shiny, sprite_normal, type, sound, description) VALUES (${userId}, ${pokeId}, 0, 1, ${date}, ${name}, ${sprite_shiny}, ${sprite_normal}, ${type}, ${sound}, ${description})`;
         }
         return true
     }  
@@ -61,7 +62,13 @@ export async function getUser(userId: string | undefined): Promise<User | null> 
                     'id', pokemon.id,
                     'date', pokemon.date,
                     'shiny', pokemon.shiny,
-                    'normal', pokemon.normal
+                    'normal', pokemon.normal,
+                    'name', pokemon.name,
+                    'sprite_shiny', pokemon.sprite_shiny,
+                    'sprite_normal', pokemon.sprite_normal,
+                    'type', pokemon.type,
+                    'sound', pokemon.sound,
+                    'description', pokemon.description
                 )
                 ) AS pokemon
             FROM users
