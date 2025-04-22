@@ -80,7 +80,7 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
                 </div>
                 <div className = "flex flex-row mt-2 w-full justify-between items-center">
                   <audio controls className="w-[80%] h-[80%]">
-                    <source src={curPokemon?.sound} type="audio/ogg" /> {/* Pokémon sound */}
+                    <source src={curPokemon?.sound} type="audio/ogg" /> {/* Pokémon sound: not possible on IOS */}
                     Your browser does not support the audio element.
                   </audio>
                     {/* Back Button */}

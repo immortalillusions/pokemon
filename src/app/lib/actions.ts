@@ -19,6 +19,13 @@ export async function getPokemonData(pokemonId: number, shiny: boolean) {
     if (response.ok && response2.ok) {
       const data = await response.json();
       const data2 = await response2.json();
+      // get the english flavour text
+      let i = 0;
+      let language = data2.flavor_text_entries[i].language.name;
+      while (language !== "en" && i < data2.flavor_text_entries.length) {
+        i++;
+        language = data2.flavor_text_entries[i].language.name;
+      }
       return { 
         name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
         sprite: shiny ? data.sprites.front_shiny : data.sprites.front_default,
@@ -26,10 +33,11 @@ export async function getPokemonData(pokemonId: number, shiny: boolean) {
         sprite_normal: data.sprites.front_default,
         type: data.types[0].type.name.charAt(0).toUpperCase() + data.types[0].type.name.slice(1),
         sound: data.cries.latest, // .ogg
-        description: data2.flavor_text_entries[1].flavor_text
+        description: data2.flavor_text_entries[i].flavor_text
           .replace(/\s+/g, " ") // Remove non ASCII and get the first flavor text entry
           .replace(/POKéMON/g, "Pokémon")
           .replace(/\b[A-Z]+\b/g, (word: string) => word.charAt(0) + word.slice(1).toLowerCase()) // Convert remaining all-uppercase words to Title Case
+          .replace(/\b[A-Z]{2,}[a-z][A-Z]*\b/g, (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Convert words with 2+ capital letters and exactly one lowercase letter to Title Case
           .replace(/-\s+/g, "-"), // Remove spaces after hyphens
       };
     } else {
