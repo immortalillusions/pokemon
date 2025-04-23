@@ -40,3 +40,7 @@ Cookies do not expire. Guest accounts will be deleted if the account is switched
 Iron session was used with NextAuth to store user data.
 Custom API for accessing database with GET and POST so that postgres connection is established minimal number of times
 Need to include cookies with headers: { Cookie: cookies().toString() } for server side fetch
+# notes
+iron session nextauth middleware zod bcrypt get post postgres loading.tsx tailwind css typescript next js node js
+# future optimization
+generatePokemon data is called before calling addPokemon and also within addPokemon - not ideal
