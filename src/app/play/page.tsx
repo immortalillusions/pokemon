@@ -9,7 +9,7 @@ setShiny: React.Dispatch<React.SetStateAction<boolean>>,
   setSrc: React.Dispatch<React.SetStateAction<string>>,
   setName: React.Dispatch<React.SetStateAction<string | undefined>>,
   setType: React.Dispatch<React.SetStateAction<string | undefined>>,
-  setSound: React.Dispatch<React.SetStateAction<string | undefined>>) {
+  setSound: React.Dispatch<React.SetStateAction<string | undefined>>): Promise<string | undefined>  {
   // Generate a random Pokémon ID between 1 and 500
   const randomId = Math.floor(Math.random() * 500) + 1; // Random number between 1 and 500
   setPoke_Id(randomId); // Update the state with the new Pokémon ID
@@ -23,8 +23,10 @@ setShiny: React.Dispatch<React.SetStateAction<boolean>>,
     setName(pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1)); 
     setType(pokemonData.type.charAt(0).toUpperCase() + pokemonData.type.slice(1));
     setSound(pokemonData.sound); // Update the Pokémon sound
+    return pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
   } else {
     console.error("Failed to fetch Pokémon data.");
+    return "not found";
   }
   // // add new pokemon
   // try{
@@ -53,17 +55,17 @@ setShiny: React.Dispatch<React.SetStateAction<boolean>>,
 
 }
 
-async function generateOptions(){
-  const options = new Set<string>(); // Use a Set to ensure unique options
-
-  while (options.size < 3) {
-    const randomId = Math.floor(Math.random() * 500) + 1; // Generate a random Pokémon ID
-    const pokemonData = await getPokemonData(randomId, false); // Fetch Pokémon data
-    const option = pokemonData?.name.charAt(0).toUpperCase() + pokemonData?.name.slice(1); // Capitalize the first letter of the name
-    options.add(option); // Add the Pokémon name to the Set
+async function generateOptions(name: string) {
+  const options = new Set<string>(); // Use a set to ensure unique options
+  options.add(name); // Add the correct answer to the set
+  while (options.size < 4) {
+    const randomId = Math.floor(Math.random() * 500) + 1; 
+    const pokemonData = await getPokemonData(randomId, false); 
+    const option = pokemonData?.name.charAt(0).toUpperCase() + pokemonData?.name.slice(1); 
+    options.add(option); 
   }
 
-  return Array.from(options); // Convert the Set to an array and return it
+  return Array.from(options).sort(() => Math.random() - 0.5); // random order
 }
 
 // potential solution to make this mobile compatible
@@ -84,10 +86,13 @@ export default function Play() {
   const [guessing, setGuessing] = useState(false); // State to track if the guessing phase is active
   const [correct, setCorrect] = useState(false); // State to track if the guess is correct  
   const handleClick = async () => {
-    generatePokemon(setPoke_Id, setShiny, setSrc, setName, setType, setSound);
-    const generatedOptions = await generateOptions();
-    setOptions(generatedOptions); // Set the generated options in the state
+    // need to set guessing BEFORE await (so answers aren't revealed)
     setGuessing(true); // Start the guessing phase
+    setCorrect(false); // Reset the correct state
+    const genName = await generatePokemon(setPoke_Id, setShiny, setSrc, setName, setType, setSound);
+    const generatedOptions = await generateOptions(genName ||"not found");
+    setOptions(generatedOptions); 
+
     // setIsCooldown(true); // Disable the button
     // setTimeout(() => {
     //   setIsCooldown(false); // Re-enable the button after 5 seconds
@@ -127,7 +132,7 @@ export default function Play() {
         {/* Text box positioned at 133px right and 344px down */}
         <div
           className="flex absolute font-sans top-[65%] left-[32%] w-[58%] h-[15%] 
-          border-2 border-yellow-500 justify-center items-center gap-1
+           justify-center items-center gap-1
           rounded-lg"
         >
           <div className = "flex flex-col w-full h-full gap-1">
@@ -136,16 +141,17 @@ export default function Play() {
           </div>
           <div className = "flex flex-col w-full h-full gap-1">
             <OptionsButton guess={options[2]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
-            <OptionsButton guess={name} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
+            <OptionsButton guess={options[3]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
           </div>
           
         </div>
         <div
           className="absolute font-sans top-[82%] left-[32%] w-[58%] h-[12%] 
-          border-2 border-yellow-500 text-white flex justify-center items-center text-[0.5rem] md:text-[0.85rem]
+          border-2 border-red-500 text-white flex justify-center items-center text-[0.5rem] md:text-[0.85rem]
           text-center rounded-lg break-words"
         >
-          {poke_Id} {type} {shiny ? "Shiny" : ""} {name}
+          {/* {poke_Id} {type} {shiny ? "Shiny" : ""} {name} */}
+            Who&apos;s that Pokemon?
         </div>
         
 

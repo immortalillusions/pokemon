@@ -1,3 +1,6 @@
+
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
+
 interface OptionsButtonProps {
     guess: string | undefined;
     answer: string  | undefined;
@@ -60,8 +63,11 @@ interface OptionsButtonProps {
             className={`h-[50%] w-[100%] items-center font-sans rounded-lg text-[0.5rem] font-medium text-white transition-colors 
             ${!guessing ? "bg-red-950" : "bg-[#D30A40] hover:bg-red-500"}`}
                 
-        >
-                {guessing ? guess : (correct ? "Correct!" : "Incorrect!")} 
+        >  
+            <span className="flex items-center justify-center gap-2">
+                {guessing ? guess : (guess?.toLowerCase() === answer?.toLowerCase() ? guess : (correct ? "" : "Incorrect"))} 
+                {guess?.toLowerCase() === answer?.toLowerCase() && correct ? <CheckCircleIcon className="h-5 w-5 text-green-500" /> : ""}
+            </span>
         </button>
       );
 }
