@@ -20,7 +20,10 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
   const [showDetails, setShowDetails] = useState(false);
   const [curPokemon, setCurPokemon] = useState<Pokemon | null>(null); // State to hold the current Pokémon details
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen w-full bg-[url('/school.gif')] bg-cover bg-center"
+      style={{
+        backgroundPosition: "center bottom", // Shift the background image upwards
+      }}>
         {/* Show inventory */}
         {!showDetails && (
         /* Inventory Box */

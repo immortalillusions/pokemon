@@ -39,6 +39,16 @@ export default async function Collection() {
   }
   console.log("Inventory:", inventory); // Log the inventory to see the fetched data
   return (
-    <Inventory inventory = {inventory} />
+    <>
+      <Inventory inventory = {inventory} />
+      {(inventory.length === 0) && (
+        <div className="flex font-sans justify-center items-center h-screen w-full bg-[url('/school.gif')] bg-cover bg-center"
+      style={{
+        backgroundPosition: "center bottom", // Shift the background image upwards
+      }}>
+        <div className = "h-[25%] w-[25%] text-center text-white bg-[#D30A40] p-4 rounded-lg flex items-center justify-center">No Pokémon in your collection! Navigate to PLAY to start collecting Pokémon!</div>
+        </div>
+      )}
+    </>
   );
 }

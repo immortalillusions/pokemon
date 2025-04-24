@@ -14,7 +14,7 @@ export default function Home() {
       * gap-16: gap of 16 units between grid items
       * sm:p-20: padding of 20 units on screens larger than 'sm' breakpoint, else it's the padding on the left of sm:
       */
-    <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div className="grid grid-rows-[20px_1fr_40px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 bg-[url('/forest.gif')] bg-cover bg-center">
       <Welcome />
       
       {/* flex flex-col: Uses Flexbox with a vertical column layout.
@@ -23,7 +23,7 @@ export default function Home() {
       items-center: Centers items horizontally 
       */}
       <main className="mt-2 flex flex-col gap-[32px] row-start-2 items-center">
-        <div className = "flex flex-col gap-2">
+        {/* <div className = "flex flex-col gap-2">
           Let&apos;s catch this pokemon!
         </div>
         <FlipPikachu/>
@@ -54,9 +54,9 @@ export default function Home() {
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
         
-        </div>
+        </div> */}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      {/* <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
           className=" flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
@@ -102,7 +102,7 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 }
