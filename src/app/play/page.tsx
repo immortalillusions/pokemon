@@ -148,7 +148,7 @@ export default function Play() {
   useEffect(() => {
     if (ball !== -1) {
       console.log(`Ball chosen: ${ball === 0 ? "Pokeball" : "Greatball"}`);
-      let timerDuration = 3000;
+      let timerDuration = 5000;
       let catchIt = false;
       if (ball === 1) {
         catchIt = (Math.random() < 0.60); // 60% chance to catch with Great Ball
@@ -157,10 +157,14 @@ export default function Play() {
       }
       setCaught(catchIt); // Set caught state based on the probability
       if (catchIt){
-        timerDuration = 5000;
+        if(ball===1){
+          timerDuration = 6900;
+        } else if (ball===0){
+          timerDuration = 7430;
+        } 
       }
-      // Set catchPhase to false after 3 seconds
-      // but if it's caught then set it to false after 5 seconds instead
+      // Set catchPhase to false after x seconds
+      // but if it's caught then set it to false a bit later to show the caught animation
       const timeout = setTimeout(() => {
         setCatchPhase(false);
         console.log("catchPhase set to false after " + timerDuration + " seconds");
@@ -212,7 +216,7 @@ export default function Play() {
             width={500}
             height={500}
             alt="pokemon"
-            className="absolute top-[8%] left-[35%] w-[45%] h-auto"
+            className="absolute top-[7%] left-[36%] w-[45%] h-auto"
             style={{
               filter: guessing && src!="/pokeball.webp" ? "brightness(0) saturate(100%)" : "none", // makes the image all black
             }}
@@ -225,7 +229,7 @@ export default function Play() {
             width={500}
             height={500}
             alt="pokemon"
-            className="absolute top-[8%] left-[35%] w-[45%] h-auto"
+            className="absolute top-[8%] left-[26%] w-[65%] h-auto"
           />
         )
         }
@@ -272,7 +276,7 @@ export default function Play() {
         </div>
         <div
           className="absolute font-sans top-[82%] left-[32%] w-[58%] h-[12%] 
-          border-2 border-red-500 text-white flex justify-center items-center text-[0.6rem] md:text-[0.85rem]
+          text-white flex justify-center items-center text-[0.6rem] md:text-[0.85rem]
           text-center rounded-lg break-words"
         >
           {/* {poke_Id} {type} {shiny ? "Shiny" : ""} {name} */}

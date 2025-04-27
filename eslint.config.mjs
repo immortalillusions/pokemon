@@ -16,6 +16,7 @@ const eslintConfig = [
       "no-unused-vars": "warn", // Warn for unused variables
       "@typescript-eslint/no-unused-vars": "warn", // Warn for unused variables in TypeScript
       "@typescript-eslint/no-empty-object-type": "warn", // Warn for empty object types
+      "react-hooks/exhaustive-deps": "warn", // Warn for missing dependencies in useEffect
     },
   },
 ];

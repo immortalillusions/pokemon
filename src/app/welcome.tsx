@@ -16,7 +16,7 @@ const Welcome = async () => {
     return (
         // p-4 = padding, mt = margin top
         <>
-              <div className="flex flex-col items-center gap-1 bg-yellow-100 p-2 rounded-lg shadow-md">
+              <div className="flex flex-col items-center gap-1 bg-yellow-100 p-2 mt-10 rounded-lg shadow-md">
                 <div className="font-sans text-3xl sm:text-2xl text-center">
                 PokiGuess
                 </div>
@@ -26,6 +26,9 @@ const Welcome = async () => {
                 <div className="text-base text-center">
                 <p className = "mb-2">Your username is: <span className="font-sans text-[0.6rem] ml-1">{session.email}</span></p>
                 <p>Your user ID is: <span className="font-sans text-[0.6rem] ml-1">{session.userId}</span></p>
+                <div className="font-sans text-l sm:text-l text-center mt-3 p-2">
+                Navigate to PLAY to catch some Pokemon!
+                </div>
                 </div>
             </div>
         </>
