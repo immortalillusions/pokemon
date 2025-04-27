@@ -16,7 +16,7 @@ const Welcome = async () => {
     return (
         // p-4 = padding, mt = margin top
         <>
-              <div className="flex flex-col items-center gap-1 bg-yellow-100 p-2 mt-10 rounded-lg shadow-md">
+              <div className="flex flex-col items-center gap-1 bg-yellow-100 p-2 mt-70 sm:mt-10 rounded-lg shadow-md">
                 <div className="font-sans text-3xl sm:text-2xl text-center">
                 PokiGuess
                 </div>
