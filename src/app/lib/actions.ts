@@ -1,4 +1,8 @@
 'use server';
+
+// according to https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
+// all of these actions are marked as server actions so when called on the client, it is still executed on the server
+
 import { signIn } from '../../../auth';
 //import { signIn } from '../../pages/api/auth/nextauth';
 import { AuthError } from 'next-auth';

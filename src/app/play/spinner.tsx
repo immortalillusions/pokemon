@@ -1,11 +1,16 @@
 'use client';
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
-export default function Spinner() {
+interface SpinnerProps {
+  ball: number;
+  setBall: React.Dispatch<React.SetStateAction<number>>; // default is -1, 0 is pokeball, 1 is greatball
+}
+
+export default function Spinner({ball, setBall}: SpinnerProps) {
   const [isSpinning, setIsSpinning] = useState(true); // State to control spinning
   const [rotation, setRotation] = useState(0); // Current rotation of the wheel
-  const [selectedOption, setSelectedOption] = useState<string | null>(null); // Selected option
-
+  
   const handleStop = () => {
     setIsSpinning(false); // Stop the spinning
 
@@ -13,12 +18,12 @@ export default function Spinner() {
     const normalizedRotation = (rotation % 360 + 360) % 360;
 
     // Determine the selected option based on the arrow's position
-    // Section B: 0-144 degrees (40% of the circle)
-    // Section A: 144-360 degrees (60% of the circle)
+    // great ball: 0-144 degrees (40% of the circle)
+    // pokeball: 144-360 degrees (60% of the circle)
     if (normalizedRotation >= 0 && normalizedRotation < 144) {
-      setSelectedOption("B");
+      setBall(1); // Set to Great Ball
     } else {
-      setSelectedOption("A");
+      setBall(0); // Pokeball
     }
   };
 
@@ -32,42 +37,74 @@ export default function Spinner() {
     }
   }, [isSpinning]);
 
+  const spinnerBackground =
+    ball === 0
+      ? `conic-gradient(
+          #00ff00 0deg 216deg,  /* Green for A (60%) */
+          #0000ff 216deg 360deg /* Blue for B (40%) */
+        )`
+      : ball === 1
+      ? `conic-gradient(
+          #ff0000 0deg 216deg,  /* Red for A (60%) */
+          #00ff00 216deg 360deg /* Green for B (40%) */
+        )`
+      : `conic-gradient(
+          #ff0000 0deg 216deg,  /* Red for A (60%) */
+          #0000ff 216deg 360deg /* Blue for B (40%) */
+        )`;
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      {/* Spinner Wheel */}
-      <div className="relative">
+    <div className="absolute top-[8%] left-[35%] w-[45%] aspect-[1] p-4">
+      {/* This container is so that the arrows/pictures can be positioned more precisely against the wheel
+      since "absolute" keyword positions the stuff precisely against its closest ancestor */}
+      <div className="relative flex justify-center items-center h-full w-full">
         <div
-          className="w-40 h-40 rounded-full"
+          className="w-[100%] h-[100%] rounded-full"
           style={{
-            background: `conic-gradient(
-              #ff0000 0deg 216deg,  /* Red for A (60%) */
-              #0000ff 216deg 360deg /* Blue for B (40%) */
-            )`,
+            background: spinnerBackground,
             transform: `rotate(${rotation}deg)`, // Apply rotation
           }}
-        ></div>
+        >
+          {/* Picture for pokeball */}
+        <Image
+          src="/pokeball.webp" 
+          alt="Pokeball"
+          width = {100}
+          height = {100}
+          className="absolute bottom-[25%] left-[84%] transform -translate-x-1/2 w-[20%] h-auto"
+          style={{
+            transform: `rotate(-${rotation}deg)`, // image spins with circle bc it's within the parent div but to prevent itself from rotating we do this
+          }}
+        />
+
+        {/* Picture for great ball */}
+        <Image
+          src="/great-ball.png" 
+          alt="Greatball"
+          width = {100}
+          height = {100}
+          className="absolute top-[29%] left-[16%] transform -translate-x-1/2 w-[25%] h-auto"
+          style={{
+            transform: `rotate(-${rotation}deg)`, 
+          }}
+        />
+        </div>
+        
 
         {/* Arrow Indicator */}
-        <div className="absolute top-[-10px] left-[50%] transform -translate-x-1/2">
-            <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-black"></div>
+        <div className="absolute top-0 left-[50%] transform -translate-x-1/2 -translate-y-[50%]">
+          <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-black"></div>
         </div>
-      </div>
-
-      {/* Stop Button */}
+        {/* Stop Button */}
       <button
         onClick={handleStop}
-        className="mt-8 px-4 py-2 bg-yellow-500 text-white rounded-lg font-bold"
+        className="font-sans absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-white rounded-lg
+        px-1 py-1 text-[0.53rem] sm:px-2 sm:py-2 sm:text-[0.7rem]" // Smaller font and button for extra small screens
         disabled={!isSpinning} // Disable button if already stopped
       >
         Stop
       </button>
-
-      {/* Display Selected Option */}
-      {selectedOption && (
-        <div className="mt-4 text-xl font-bold">
-          Selected Option: {selectedOption}
-        </div>
-      )}
-    </div>
+      </div>
+  </div>
   );
 }

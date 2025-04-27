@@ -1,10 +1,13 @@
 "use client"; // This component is a client component
 import Image from "next/image";
-import FlipPikachu from "../flipPikachu";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getPokemonData } from "../lib/actions"; // Import the function to fetch Pokémon data
 import OptionsButton from "./options-button";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
+import Spinner from "./spinner"; 
+
+
+// Note: all api calls are done in getPokemonData which is a server function so is run on the server
 async function generatePokemon(setPoke_Id: React.Dispatch<React.SetStateAction<number | undefined>>, 
 setShiny: React.Dispatch<React.SetStateAction<boolean>>,
   setSrc: React.Dispatch<React.SetStateAction<string>>,
@@ -69,6 +72,34 @@ async function generateOptions(name: string) {
   return Array.from(options).sort(() => Math.random() - 0.5); // random order
 }
 
+const addPokemonToDB = async (poke_Id: number | undefined, shiny: boolean) => {
+  try{
+    const response = await fetch("/api/addPokemon", {
+    method: "POST", // modifying data
+    body: JSON.stringify({
+    // Send data in the body
+    // user id will be extracted from the session in the api route
+        pokeId: poke_Id,
+        shiny: shiny,
+    }),
+    headers: {
+        "Content-Type": "application/json", // json type
+    },
+    });
+
+    if (!response.ok) {
+    throw new Error("Failed to add Pokemon");
+    }
+
+//   const data = await response.json();
+// console.log("New pokemon: ", data);
+} catch (error) {
+    console.error("Error:", error);
+}
+};
+
+
+
 // potential solution to make this mobile compatible
 //  button/text screen on right as separate image (this is good size for mobile) (crop pokedex.png)
 // then separate big image on left (prob custom made) for the pokemon pictures/animations on desktop
@@ -84,12 +115,20 @@ export default function Play() {
   const [options, setOptions] = useState<string[]>([]); // State to hold the options for the buttons
   const [loading, setLoading] = useState(false); // State to track loading status
   const [funFact, setFunFact] = useState<string | undefined>(); // State to hold fun fact
+  const [catchPhase, setCatchPhase] = useState(false); // State to track if the catch phase is active
+  const [ball, setBall] = useState(-1); // -1 if no ball, 0 if pokeball, 1 if greatball
+  const [caught, setCaught] = useState(false); // State to track if the Pokémon is caught
   // button cooldown
  //  const [isCooldown, setIsCooldown] = useState(false); 
   // guesing phase
   const [guessing, setGuessing] = useState(false); // State to track if the guessing phase is active
   const [correct, setCorrect] = useState(false); // State to track if the guess is correct  
+  
+  // Find Pokemon is clicked
   const handleClick = async () => {
+    setBall(-1); // Reset the ball state
+    setCatchPhase(false); // Reset the catch phase
+    setCaught(false); // Reset the caught state
     const randomId = Math.floor(Math.random() * 500) + 1; 
     const pokemonData = await getPokemonData(randomId, false); 
     const randomName = pokemonData?.name.charAt(0).toUpperCase() + pokemonData?.name.slice(1);
@@ -104,15 +143,45 @@ export default function Play() {
       setOptions(generatedOptions); 
       setLoading(false);
     }, 5000); 
-    // setIsCooldown(true); // Disable the button
-    // setTimeout(() => {
-    //   setIsCooldown(false); // Re-enable the button after 5 seconds
-    // }, 5000);
   };
+  // set caught based on probability of the ball
+  useEffect(() => {
+    if (ball !== -1) {
+      console.log(`Ball chosen: ${ball === 0 ? "Pokeball" : "Greatball"}`);
+      let timerDuration = 3000;
+      let catchIt = false;
+      if (ball === 1) {
+        catchIt = (Math.random() < 0.60); // 60% chance to catch with Great Ball
+      } else {
+        catchIt = (Math.random() < 0.3); // 30% chance to catch with Pokeball
+      }
+      setCaught(catchIt); // Set caught state based on the probability
+      if (catchIt){
+        timerDuration = 5000;
+      }
+      // Set catchPhase to false after 3 seconds
+      // but if it's caught then set it to false after 5 seconds instead
+      const timeout = setTimeout(() => {
+        setCatchPhase(false);
+        console.log("catchPhase set to false after " + timerDuration + " seconds");
+      }, timerDuration);
+
+      // Cleanup timeout
+      return () => clearTimeout(timeout);
+    }
+  }, [ball]); // Run this effect whenever ball changes
+  // Can't do this in the above useEffect bc it will run before caught is updated since the update is async
+  useEffect(() => {
+    if (caught) {
+      console.log("Adding Pokémon to the database...");
+      addPokemonToDB(poke_Id, shiny); // Call the function to add Pokémon to the database
+    }
+  }, [caught]); // Run this effect whenever 'caught' changes
+  console.log("catchPhase:", catchPhase, "caught:", caught, "shiny:", shiny, "name:", name, "ball: ", ball);
   return (
     <div className="flex justify-center items-center h-screen bg-[url('/fishing.gif')] bg-cover bg-center">
       <div
-        className="relative border-4 border-yellow-500 rounded-lg aspect-[429/670] w-[90%] max-w-[429px]"
+        className="relative rounded-lg aspect-[429/670] w-[90%] max-w-[429px]"
         style={{
           backgroundImage: "url('/pokedex_col.png')", // Set the background image
           backgroundSize: "contain", // Ensure the image fits within the container
@@ -137,7 +206,7 @@ export default function Play() {
             Searching...
           </div>
         </span>
-      ) : 
+      ) : !catchPhase ? (
           <Image 
             src={src}
             width={500}
@@ -148,13 +217,23 @@ export default function Play() {
               filter: guessing && src!="/pokeball.webp" ? "brightness(0) saturate(100%)" : "none", // makes the image all black
             }}
           />
+        ) : ball===-1 ? ( /* ball has not been chosen yet */
+          <Spinner ball = {ball} setBall={setBall}/>
+        ) : (
+          <Image
+            src={ball===1 ?"/great-ball-success.gif":"/success-catch2.gif"}
+            width={500}
+            height={500}
+            alt="pokemon"
+            className="absolute top-[8%] left-[35%] w-[45%] h-auto"
+          />
+        )
         }
-        {/* <FlipPikachu/> */}
         <button
               onClick={handleClick}
-              disabled={guessing}
+              disabled={guessing || catchPhase}
               className={`h-[10%] w-[50%] absolute top-[52%] left-[36%] font-sans items-center rounded-lg px-4 text-[0.8rem] md:text-lg font-medium text-white transition-colors 
-                ${guessing ? "bg-red-950" : "bg-[#D30A40] hover:bg-red-500"}`}
+                ${guessing || catchPhase? "bg-red-950" : "bg-[#D30A40] hover:bg-red-500"}`}
               
             >
               Find Pokemon
@@ -175,12 +254,12 @@ export default function Play() {
           : src!="/pokeball.webp"?(
             <>
           <div className = "flex flex-col w-full h-full gap-1">
-            <OptionsButton guess={options[0]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
-            <OptionsButton guess={options[1]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
+            <OptionsButton guess={options[0]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect} catchPhase = {catchPhase} setCatchPhase={setCatchPhase}/>
+            <OptionsButton guess={options[1]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect} catchPhase = {catchPhase} setCatchPhase={setCatchPhase}/>
           </div>
           <div className = "flex flex-col w-full h-full gap-1">
-            <OptionsButton guess={options[2]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
-            <OptionsButton guess={options[3]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect}/>
+            <OptionsButton guess={options[2]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect} catchPhase = {catchPhase} setCatchPhase={setCatchPhase}/>
+            <OptionsButton guess={options[3]} answer={name} randomId = {poke_Id} randomShiny = {shiny} guessing={guessing} setGuessing={setGuessing} correct={correct} setCorrect={setCorrect} catchPhase = {catchPhase} setCatchPhase={setCatchPhase}/>
           </div>
           </>
         ):(<div className="text-white text-center text-[0.5rem] sm:text-[0.6rem] break-words w-full h-full flex items-center justify-center"
@@ -193,11 +272,20 @@ export default function Play() {
         </div>
         <div
           className="absolute font-sans top-[82%] left-[32%] w-[58%] h-[12%] 
-          border-2 border-red-500 text-white flex justify-center items-center text-[0.8rem] md:text-[0.85rem]
+          border-2 border-red-500 text-white flex justify-center items-center text-[0.6rem] md:text-[0.85rem]
           text-center rounded-lg break-words"
         >
           {/* {poke_Id} {type} {shiny ? "Shiny" : ""} {name} */}
-            Who&apos;s that Pokemon?
+          {!correct && src!="/pokeball.webp" && !guessing?
+                "Aww - so close! Click the button to try again!"
+            : caught && ball!==-1 && !catchPhase ?
+            "You caught " + (shiny ? "Shiny " : "") + name + "!" 
+            : !caught && ball!==-1 && !catchPhase ?
+            "Oh no! " + (shiny ? "Shiny " : "") + name + (ball?"c":"n") + " broke free!"
+            :
+            "Who's that Pokemon?"
+          }  
+            
         </div>
         
 

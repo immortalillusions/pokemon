@@ -10,6 +10,8 @@ interface OptionsButtonProps {
     setGuessing: React.Dispatch<React.SetStateAction<boolean>>;
     correct: boolean;
     setCorrect: React.Dispatch<React.SetStateAction<boolean>>;
+    catchPhase: boolean;
+    setCatchPhase: React.Dispatch<React.SetStateAction<boolean>>;
   }
   
   export default function OptionsButton({
@@ -21,36 +23,14 @@ interface OptionsButtonProps {
     setGuessing,
     correct,
     setCorrect,
+    catchPhase,
+    setCatchPhase,
   }: OptionsButtonProps) {   
     const verify = async () => {
         // Check if the guess is correct
         if (guess?.toLowerCase() === answer?.toLowerCase()) {
             setCorrect(true); // Set correct state to true
-            // add pokemon to db
-            // add new pokemon
-            try{
-                const response = await fetch("/api/addPokemon", {
-                method: "POST", // modifying data
-                body: JSON.stringify({
-                // Send data in the body
-                // user id will be extracted from the session in the api route
-                    pokeId: randomId,
-                    shiny: randomShiny,
-                }),
-                headers: {
-                    "Content-Type": "application/json", // json type
-                },
-                });
-
-                if (!response.ok) {
-                throw new Error("Failed to add Pokemon");
-                }
-
-            //   const data = await response.json();
-            // console.log("New pokemon: ", data);
-            } catch (error) {
-                console.error("Error:", error);
-            }
+            setCatchPhase(true); // Set catch phase to true
         } else {
             setCorrect(false); // Set correct state to false
         }
