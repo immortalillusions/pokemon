@@ -54,12 +54,13 @@ export default function Spinner({ball, setBall}: SpinnerProps) {
         )`;
 
   return (
-    <div className="absolute top-[8%] left-[35%] w-[45%] aspect-[1] p-4">
+    <div className="absolute top-[9%] left-[38%] w-[140px] h-[140px] sm:w-[190px] sm:h-[190px] sm:top-[8%] sm:left-[36%]">
       {/* This container is so that the arrows/pictures can be positioned more precisely against the wheel
       since "absolute" keyword positions the stuff precisely against its closest ancestor */}
-      <div className="relative flex justify-center items-center h-full w-full">
+      <div className="relative flex justify-center items-center h-full w-full"
+      >
         <div
-          className="w-[100%] h-[100%] rounded-full"
+          className="w-full h-full rounded-full"
           style={{
             background: spinnerBackground,
             transform: `rotate(${rotation}deg)`, // Apply rotation
