@@ -6,7 +6,6 @@ import OptionsButton from "./options-button";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import Spinner from "./spinner"; 
 
-
 // Note: all api calls are done in getPokemonData which is a server function so is run on the server
 async function generatePokemon(setPoke_Id: React.Dispatch<React.SetStateAction<number | undefined>>, 
 setShiny: React.Dispatch<React.SetStateAction<boolean>>,
@@ -71,7 +70,7 @@ async function generateOptions(name: string) {
 
   return Array.from(options).sort(() => Math.random() - 0.5); // random order
 }
-
+// Todo: move this to server bc ppl can cheat by directly calling the api addPokemeon in network requests using inspect i
 const addPokemonToDB = async (poke_Id: number | undefined, shiny: boolean) => {
   try{
     const response = await fetch("/api/addPokemon", {
@@ -115,11 +114,11 @@ export default function Play() {
   const [options, setOptions] = useState<string[]>([]); // State to hold the options for the buttons
   const [loading, setLoading] = useState(false); // State to track loading status
   const [funFact, setFunFact] = useState<string | undefined>(); // State to hold fun fact
+  const [funFactPokemon, setFunFactPokemon] = useState<string | undefined>(); // State to hold fun fact's pokemon name
   const [catchPhase, setCatchPhase] = useState(false); // State to track if the catch phase is active
   const [ball, setBall] = useState(-1); // -1 if no ball, 0 if pokeball, 1 if greatball
   const [caught, setCaught] = useState(false); // State to track if the Pokémon is caught
-  // button cooldown
- //  const [isCooldown, setIsCooldown] = useState(false); 
+
   // guesing phase
   const [guessing, setGuessing] = useState(false); // State to track if the guessing phase is active
   const [correct, setCorrect] = useState(false); // State to track if the guess is correct  
@@ -132,6 +131,7 @@ export default function Play() {
     const randomId = Math.floor(Math.random() * 500) + 1; 
     const pokemonData = await getPokemonData(randomId, false); 
     const randomName = pokemonData?.name.charAt(0).toUpperCase() + pokemonData?.name.slice(1);
+    setFunFactPokemon(randomName); // Set the fun fact's Pokemon name
     setFunFact(pokemonData?.description.replace(/\bit\b(?!s)/i, randomName || "it")); // Set the fun fact
     // need to set guessing BEFORE await (so answers aren't revealed)
     setGuessing(true); // Start the guessing phase
@@ -185,7 +185,7 @@ export default function Play() {
   return (
     <div className="flex justify-center items-center h-screen bg-[url('/fishing.gif')] bg-cover bg-center">
       <div
-        className="relative rounded-lg aspect-[429/670] w-[90%] max-w-[429px]"
+        className="relative rounded-lg aspect-[429/670] w-[90%] max-w-[429px] fade-in-animation"
         style={{
           backgroundImage: "url('/pokedex_col.png')", // Set the background image
           backgroundSize: "contain", // Ensure the image fits within the container
@@ -225,6 +225,7 @@ export default function Play() {
           <Spinner ball = {ball} setBall={setBall}/>
         ) : (
           <Image
+            key={ball} // Use a unique key to force re-render; ensures gif always starts from beginning
             src={ball===1 ?"/great-ball-success.gif":"/success-catch2.gif"}
             width={500}
             height={500}
@@ -242,9 +243,9 @@ export default function Play() {
             >
               Find Pokemon
         </button>
-        {/* Text box positioned at 133px right and 344px down */}
+        {/* Text box positioned at 133px right and 344px down top - 65 vs 82*/}
         <div
-          className="flex absolute font-sans top-[65%] left-[32%] w-[58%] h-[15%] 
+          className="flex absolute font-sans top-[76%] left-[32%] w-[58%] h-[15%] 
            justify-center items-center gap-1
           rounded-lg"
         >
@@ -275,9 +276,9 @@ export default function Play() {
         }
         </div>
         <div
-          className="absolute font-sans top-[82%] left-[32%] w-[58%] h-[12%] 
+          className="absolute font-sans top-[63%] left-[32%] w-[58%] h-[12%] 
           text-white flex justify-center items-center text-[0.6rem] md:text-[0.85rem]
-          text-center rounded-lg break-words"
+          text-center rounded-lg border-2 break-words p-1"
         >
           {/* {poke_Id} {type} {shiny ? "Shiny" : ""} {name} */}
           {!correct && src!="/pokeball.webp" && !guessing?
@@ -285,11 +286,16 @@ export default function Play() {
             : caught && ball!==-1 && !catchPhase ?
             "You caught " + (shiny ? "Shiny " : "") + name + "!" 
             : !caught && ball!==-1 && !catchPhase ?
-            "Oh no! " + (shiny ? "Shiny " : "") + name + (ball?"c":"n") + " broke free!"
+            "Oh no! " + (shiny ? "Shiny " : "") + name + " broke free!"
+            : loading ?
+            <>
+            {funFactPokemon}&#39;s<br/>Fun Fact
+            </>
+            : catchPhase ?
+            "Catch that Pokemon!"
             :
             "Who's that Pokemon?"
-          }  
-            
+          }     
         </div>
         
 

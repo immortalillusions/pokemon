@@ -37,18 +37,20 @@ export default async function Collection() {
   if (inventory.length === 1 && inventory[0] && Object.values(inventory[0]).every((value) => value === null)) {
     inventory = [];
   }
-  console.log("Inventory:", inventory); // Log the inventory to see the fetched data
+  // console.log("Inventory:", inventory); // Log the inventory to see the fetched data
   return (
     <>
-      <Inventory inventory = {inventory} />
-      {(inventory.length === 0) && (
-        <div className="flex font-sans justify-center items-center h-screen w-full bg-[url('/school.gif')] bg-cover bg-center"
+      
+      {(inventory.length === 0) ? (
+        <div className="flex font-sans text-[1rem] justify-center items-center h-screen w-full bg-[url('/school.gif')] bg-cover bg-center"
       style={{
         backgroundPosition: "center bottom", // Shift the background image upwards
       }}>
-        <div className = "h-[25%] w-[25%] text-center text-white bg-[#D30A40] p-4 rounded-lg flex items-center justify-center">No Pokémon in your collection! Navigate to PLAY to start collecting Pokémon!</div>
+        <div className = "h-[25%] w-[70%] text-center text-white bg-[#D30A40] p-4 rounded-lg flex items-center justify-center">No Pokemon in your collection! Navigate to PLAY to start collecting Pokémon!</div>
         </div>
-      )}
+      ):
+      <Inventory inventory = {inventory} />
+      }
     </>
   );
 }

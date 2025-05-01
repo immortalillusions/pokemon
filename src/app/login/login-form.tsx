@@ -12,6 +12,7 @@ import { authenticate } from '@/app/lib/actions';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import {noAccount} from '../../../auth'
+import RevealText from '../animations/reveal-text';
 
 export default function LoginForm(){
     const searchParams = useSearchParams();
@@ -32,7 +33,7 @@ export default function LoginForm(){
       <form action = {formAction} noValidate className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
           <h1 className="font-sans mb-3 text-2xl text-center">
-            Login to an account
+            <RevealText texts = "Login to an account"></RevealText>
           </h1>
           <div className="w-full">
             <div>

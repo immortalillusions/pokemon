@@ -11,6 +11,7 @@ async function listUser(user_id: string) {
                   users.name AS name,
                   users.password AS password,
                   users.email AS email,
+                  users.guest_created AS guest_created,
                   json_agg(
                   json_build_object(
                       'id', pokemon.id,

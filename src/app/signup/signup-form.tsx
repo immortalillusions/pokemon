@@ -7,6 +7,7 @@ import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon, UserIcon, ArrowRightIcon,
 import { Button } from '../login/button';
 import Loading from '../loading'; // Import the Loading component
 import Image from 'next/image'; // Import Image from next/image
+import RevealText from '../animations/reveal-text';
 // i do not want to show login option if it is a guest account 
 async function checkGuest(){
   try {
@@ -23,7 +24,8 @@ async function checkGuest(){
     if (Object.keys(data).length === 0) {
       return null; // Handle empty JSON case
     }
-
+    console.log("User data:", data);
+    console.log("Guest created:", data.guest_created);
     return data.guest_created; // Return the guest_created value
   } catch (error) {
     console.error("Error:", error);
@@ -38,7 +40,7 @@ export function SignupForm() {
     useEffect(() => {
       async function fetchGuestStatus() {
         const guestCreated = await checkGuest();
-        setIsNotGuest(guestCreated === null); // Update state based on guest status
+        setIsNotGuest(guestCreated === null || guestCreated === undefined); // Update state based on guest status
         setLoading(false);
       }
   
@@ -79,7 +81,7 @@ export function SignupForm() {
         </div>
         <form action={action} noValidate className="space-y-3">
           <div className="flex-1 rounded-lg bg-gray-100 px-6 pb-4 pt-8">
-            <h1 className="font-sans mb-3 text-2xl text-center">Create an account</h1>
+            <h1 className="font-sans mb-3 text-2xl text-center"><RevealText texts = "Create an account"/></h1>
             <div className="w-full">
               {/* Name Field */}
               <div>
@@ -166,7 +168,7 @@ export function SignupForm() {
     
             {/* Submit Button */}
             <Button className="mt-4 w-full" aria-disabled={pending}>
-              Sign Up <UserPlusIcon className="ml-auto h-5 w-5 text-gray-50" />
+              Sign Up {!isNotGuest && "& Save Progress"}<UserPlusIcon className="ml-auto h-5 w-5 text-gray-50" />
             </Button>
             {/* Go to login only if it is not a guest*/}
             {isNotGuest && (<Button

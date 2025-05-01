@@ -22,8 +22,26 @@
   }
 }
 
+.fade-in-animation {
+  animation: fade-in 2s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Garamond', sans-serif; /* Apply garamond as default*/
+}
+
+.scrollbar{
+  scrollbar-color: #f1b0c2 #D30A40;
+  scrollbar-width: auto;
 }
