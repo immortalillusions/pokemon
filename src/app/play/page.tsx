@@ -5,6 +5,8 @@ import { getPokemonData } from "../lib/actions"; // Import the function to fetch
 import OptionsButton from "./options-button";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import Spinner from "./spinner"; 
+import useSound from "use-sound";
+import { Playwrite_DK_Loopet_Guides } from "next/font/google";
 
 // Note: all api calls are done in getPokemonData which is a server function so is run on the server
 async function generatePokemon(setPoke_Id: React.Dispatch<React.SetStateAction<number | undefined>>, 
@@ -123,6 +125,9 @@ export default function Play() {
   const [guessing, setGuessing] = useState(false); // State to track if the guessing phase is active
   const [correct, setCorrect] = useState(false); // State to track if the guess is correct  
   
+  const [play] = useSound("/Win.mp3");
+  const [playLose] = useSound("/Lose.mp3"); // Import sound for losing
+
   // Find Pokemon is clicked
   const handleClick = async () => {
     setBall(-1); // Reset the ball state
@@ -167,6 +172,11 @@ export default function Play() {
       // but if it's caught then set it to false a bit later to show the caught animation
       const timeout = setTimeout(() => {
         setCatchPhase(false);
+        if (catchIt) {
+          play();// play sound
+        } else {
+          playLose();
+        }
         console.log("catchPhase set to false after " + timerDuration + " seconds");
       }, timerDuration);
 

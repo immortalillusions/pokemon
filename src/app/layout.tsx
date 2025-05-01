@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./Navbar";
+import { MusicButton } from "./music-button";
 // anything in layout is shared among all UI within the same folder
 // need to import here for optimization: hosts font files with other static assets so that there are no additional network requests.
 import { Press_Start_2P } from "next/font/google";
@@ -31,6 +32,7 @@ export default function RootLayout({
         {children}
         {/* include navbar */}
         <Navbar/>
+        <MusicButton>hi</MusicButton>
       </body>
     </html>
   );

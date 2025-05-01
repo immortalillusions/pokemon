@@ -1,3 +1,4 @@
+import useSound from 'use-sound';
 
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
@@ -26,16 +27,22 @@ interface OptionsButtonProps {
     catchPhase,
     setCatchPhase,
   }: OptionsButtonProps) {   
+    const [play] = useSound("/correct.mp3", {volume: 0.5});
+    const [play2] = useSound("/wrong.mp3", {volume: 0.5});
     const verify = async () => {
         // Check if the guess is correct
         if (guess?.toLowerCase() === answer?.toLowerCase()) {
             setCorrect(true); // Set correct state to true
             setCatchPhase(true); // Set catch phase to true
+            play();
         } else {
             setCorrect(false); // Set correct state to false
+            play2();
         }
         setGuessing(false); // End the guessing phase
       };
+
+
       return(
             <button
             onClick={verify}

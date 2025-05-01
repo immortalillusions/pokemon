@@ -39,7 +39,7 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
       style={{
         backgroundPosition: "center bottom", // Shift the background image upwards
       }}>
-        <div className = "font-sans w-[26.5rem] text-sm sm:text-base rounded-lg p-4 bg-yellow-200"><WavyText text1 = "Say " wave = "hi~" text2=" to your friends!"  /></div>
+        <div className = "font-sans w-[26.5rem] text-sm sm:text-base rounded-lg p-4 bg-yellow-200"><WavyText text1 = "Say " wave = "hi~" text2=" to your Pokemon!"  /></div>
         <div className="w-[26.5rem] flex items-center justify-around bg-yellow-200 rounded-lg mt-1 mb-1 p-2 gap-2">
           {/* Search Input */}
           <input

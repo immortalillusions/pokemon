@@ -13,5 +13,5 @@ export const config = {
   // auth logic is applied to all routes except api, static, image, .png files, signup
   // my pokeball and background was not loading bc i didn't exclude it here
   // protects all routes except^
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup|.*\\.jpeg$|.*\\.webp$|.*\\.ico$|.*\\.gif$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$|signup|.*\\.jpeg$|.*\\.webp$|.*\\.ico$|.*\\.gif$|.*\\.mp3$).*)'],
 };

@@ -23,7 +23,7 @@
 }
 
 .fade-in-animation {
-  animation: fade-in 2s;
+  animation: fade-in 1s;
 }
 
 @keyframes fade-in {
