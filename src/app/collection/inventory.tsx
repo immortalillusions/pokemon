@@ -1,5 +1,4 @@
 'use client';
-import { setConfig } from "next/config";
 import { Pokemon } from "../lib/definitions";
 import Image from "next/image";
 import { useState } from "react"; // Import useState from React
@@ -75,7 +74,7 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
               key={pokemon.id}
               type = "button"
               onClick = {() => showPokemon(pokemon, setShowDetails, setCurPokemon)} // Handle click event
-              className="aspect-square flex justify-center bg-yellow-200 border hover:bg-yellow-300 border-yellow-300 rounded-md p-2"
+              className="aspect-square flex justify-center bg-yellow-200 hover:bg-yellow-300 rounded-md p-2"
             >
               <Image
                 src={pokemon.sprite || "/pokeball.webp"} // Use the sprite URL for the image or a placeholder
@@ -91,7 +90,7 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
         {/* Show Pokemon description */}
         {showDetails && (
           <div className="flex w-[26.5rem] h-[26.5rem] aspect-square bg-[#D30A40] scrollbar overflow-y-scroll items-center justify-center">
-            <div className="w-[90%] h-[90%] grid grid-rows-2 justify-center items-center bg-yellow-200 border border-yellow-300 rounded-md p-2">
+            <div className="w-[90%] h-[90%] grid grid-rows-2 justify-center items-center bg-yellow-200 rounded-md p-2">
             <div className="flex flex-row items-center justify-center h-full">
               <div className="flex flex-col justify-center w-[60%]">
                 <h2 className="text-center text-l font-bold font-sans">{curPokemon?.name}</h2> {/* Pokémon name */}
@@ -115,7 +114,7 @@ export default function Inventory({inventory}:{inventory: Pokemon[]}) {
               {/* Second Row: Large Box and Button */}
               <div className="flex flex-col items-end justify-between h-full">
                 {/* Large Box */}
-                <div className="w-[100%] h-[90%] bg-yellow-300 border border-yellow-400 rounded-md p-4">
+                <div className="w-[100%] h-[90%] bg-yellow-300 rounded-md p-4">
                   {/* Add content for the large box here */}
                   <p className="text-center text-sm">{curPokemon?.description}</p> {/* Pokémon description */}
                 </div>

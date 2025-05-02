@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline"; // Importing the icon for the circle menu
 
 export default function CircleMenu({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function CircleMenu({ children }: { children: React.ReactNode }) 
         onClick={toggleMenu} // Toggle menu on click
         className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300"
       >
-        <div className="text-white font-semibold">+</div>
+        <div className="text-white font-semibold"><Bars3Icon className="w-10"/></div>
       </div>
       {/* Render children when the menu is open */}
       {isMenuOpen && (
