@@ -72,7 +72,7 @@ async function generateOptions(name: string) {
 
   return Array.from(options).sort(() => Math.random() - 0.5); // random order
 }
-// Todo: move this to server bc ppl can cheat by directly calling the api addPokemeon in network requests using inspect i
+
 const addPokemonToDB = async (poke_Id: number | undefined, shiny: boolean) => {
   try{
     const response = await fetch("/api/addPokemon", {

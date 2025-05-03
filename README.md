@@ -1,46 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PokiGuess 🎮
+Guess the Pokemon correctly for the chance to catch it!
 
-## Getting Started
+This was inspired by all my friends who are obsessed with TCG packs :)
 
-First, run the development server:
+## 🧭 Catching Pokemon
+1. 🔍 Your journey begins with a search. While you wait for a Pokemon to appear, why don't you read a fun fact about a random Pokemon? 
+2. 🕵️ Guess the Pokemon based on its outline!
+3. ✅ If you guess correctly, choose between Pokeball (30% success) and Great Ball (60% success)
+4. 🎯 Catch the Pokemon! (✨ 10% shiny chance)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ⚙️ Features
+🔐 **Authentication**: Create an account to save your progress or play as a Guest. Implemented with middleware, Iron Session, bcrypt, zod, and NextAuth.js. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🧑‍🤝‍🧑 **Pokemon Collection**: Say hi to all your new Pokemon friends! Data is saved with NeonDB (PostgreSQL) and updated through custom API routes (GET, POST). Each Pokemon's fun fact & ingame sound is courtesy of PokeAPI.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🎵 **Misc**: Music/sound effects are implemented with use-sound (React hook). GUI is created with Tailwind CSS, HTML, React.js. Animations use framer-motion & CSS animations.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Misc
-Cookies do not expire. Guest accounts will be deleted if the account is switched out to save space on database (deleted from users and pokemon db). This ensures there are no "stale" guest accounts.
-Iron session was used with NextAuth to store user data.
-Custom API for accessing database with GET and POST so that postgres connection is established minimal number of times
-Need to include cookies with headers: { Cookie: cookies().toString() } for server side fetch
-# notes
-iron session nextauth middleware zod bcrypt get post postgres loading.tsx tailwind css typescript next js node js
-# future optimization
-generatePokemon data is called before calling addPokemon and also within addPokemon - not ideal
+📱 **Mobile Compatible**: Adjustable items scale with screen size. However, Pokemon sounds are not compatible on iOS (.ogg format).
