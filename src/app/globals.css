@@ -6,13 +6,6 @@
   --font-sans: sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 @keyframes spin-custom {
   0% {
     transform: rotate(0deg);
